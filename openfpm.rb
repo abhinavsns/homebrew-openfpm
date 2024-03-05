@@ -31,7 +31,7 @@ class Openfpm < Formula
     cd clone_path do
       # Set environment variables if needed
       ENV["CXX"] = "mpic++"
-#     system "brew", "unlink", "hdf5"
+      system "brew", "unlink", "hdf5", ENV["HOME"]
       # Create and move to the build directory
       mkdir "build" unless File.exist?("build")
       cd "build" do
@@ -64,7 +64,7 @@ class Openfpm < Formula
                "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache",
                "-DCMAKE_C_COMPILER_LAUNCHER=ccache"
         system "make", "install"
-        system "../script/create_brew.mk.sh"
+        system "../script/create_brew.mk.sh", ENV["HOME"]
       end
     end
   end
