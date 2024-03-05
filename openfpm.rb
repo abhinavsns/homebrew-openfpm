@@ -32,7 +32,6 @@ class Openfpm < Formula
       ENV["CCACHE_DIR"] = "#{ENV["HOME"]}/.ccache"
       mkdir_p ENV["CCACHE_DIR"]
       ENV["CXX"] = "mpic++"
-      system "brew", "unlink", "hdf5", ENV["HOME"]
       # Create and move to the build directory
       mkdir "build" unless File.exist?("build")
       cd "build" do
