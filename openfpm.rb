@@ -18,7 +18,7 @@ class Openfpm < Formula
 
   def install
     # Define custom clone path
-    clone_path = Pathname.new("~/openfpm/openfpm_project")
+    clone_path = Pathname.new("#{ENV["HOME"]}/openfpm_src")
 
     # Ensure the clone path directory exists
     clone_path.mkpath
@@ -64,6 +64,7 @@ class Openfpm < Formula
                "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache",
                "-DCMAKE_C_COMPILER_LAUNCHER=ccache"
         system "make", "install"
+        system "../script/create_brew.mk.sh"
       end
     end
   end
