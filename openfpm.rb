@@ -5,6 +5,7 @@ class Openfpm < Formula
   license "BSD-3-Clause"
 
   depends_on "cmake" => :build
+  depends_on "ccache"
   depends_on "petsc"
   depends_on "boost"
   depends_on "vc"
@@ -46,7 +47,6 @@ class Openfpm < Formula
                "-DENABLE_NUMERICS=ON",
                "-DENABLE_GARBAGE_INJECTOR=OFF",
                "-DENABLE_VCLUSTER_GARBAGE_INJECTOR=OFF",
-               "-DCUDA_ON_BACKEND=NONE",
                "-DMPI_VENDOR=openmpi",
                "-DMPI_ROOT=#{Formula["petsc"].opt_prefix}",
                "-DPETSC_ROOT=#{Formula["petsc"].opt_prefix}",
@@ -60,7 +60,9 @@ class Openfpm < Formula
                "-DMETIS_ROOT=#{Formula["metis"].opt_prefix}",
                "-DOPENBLAS_ROOT=#{Formula["openblas"].opt_prefix}",
                "-DSUITESPARSE_ROOT=#{Formula["suite-sparse"].opt_prefix}",
-               "-DEIGEN3_ROOT=#{Formula["eigen"].opt_prefix}"
+               "-DEIGEN3_ROOT=#{Formula["eigen"].opt_prefix}",
+               "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache",
+               "-DCMAKE_C_COMPILER_LAUNCHER=ccache"
         system "make", "install"
       end
     end
