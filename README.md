@@ -13,6 +13,8 @@ After successful compilation, we have to create the example.mk file in the `$HOM
 $HOME/Library/Caches/Homebrew/openfpm--git/script/create_brew.mk.sh
 ```
 
+and can be configured using the CMake command that brew outputs during the installation.
+
 Whenever compiling an OpenFPM example, please edit the makefile to modify the line `include example.mk` with `include ~/.ofpexample.mk`.
 The source code used for compilation can be retreived from `$HOME/Library/Caches/Homebrew/openfpm--git`
 
