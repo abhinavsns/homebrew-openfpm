@@ -1,0 +1,46 @@
+name: Brew Formula Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  test_formula:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+      fail-fast: false
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up Homebrew
+      uses: Homebrew/actions/setup-homebrew@master
+
+    - name: Install dependencies
+      run: |
+        brew install cmake ccache petsc boost vc eigen hdf5-mpi
+        brew install abhinavsns/homebrew-openfpm/parmetis
+        brew install abhinavsns/homebrew-openfpm/libhilbert
+        brew install abhinavsns/homebrew-openfpm/blitz
+        brew install abhinavsns/homebrew-openfpm/algoim
+
+    - name: Test install formula
+      run: |
+        brew install --verbose --build-bottle ./Formula/openfpm.rb
+
+    - name: Bottle formula
+      run: |
+        brew bottle --json --root-url="https://github.com/mosaic-group/openfpm/releases/download" openfpm
+        brew bottle --merge --write --no-commit ./openfpm--*.json
+
+    - name: Upload bottles
+      uses: actions/upload-artifact@v2
+      with:
+        name: bottles
+        path: "*.bottle.*.tar.gz"
