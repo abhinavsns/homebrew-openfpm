@@ -1,6 +1,11 @@
 class Openfpm < Formula
   desc "openfpm: Open scalable framework for particle and mesh simulations on heterogeneous architectures"
   homepage "https://openfpm.mpi-cbg.de"
+  url "https://github.com/mosaic-group/openfpm.git",
+      using:    :git,
+      tag:      "version/5.0",  
+      revision: "1198879"  
+
   head "https://github.com/mosaic-group/openfpm.git", branch: "develop"
   license "BSD-3-Clause"
 
@@ -29,8 +34,6 @@ class Openfpm < Formula
     end
 
     cd clone_path do
-      commit_id = "version/5.0" # Replace with actual commit ID
-      system "git", "checkout", commit_id
       ENV["CCACHE_DIR"] = "#{ENV["HOME"]}/.ccache"
       mkdir_p ENV["CCACHE_DIR"]
       ENV["CXX"] = "mpic++"
