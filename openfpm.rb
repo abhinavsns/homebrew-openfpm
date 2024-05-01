@@ -26,6 +26,9 @@ class Openfpm < Formula
     # Clone the repository only if it hasn't been cloned already
     unless clone_path.exist? && !clone_path.children.empty?
       system "git", "clone", "--recursive", "https://github.com/mosaic-group/openfpm.git", clone_path
+      cd clone_path do
+      commit_id = "version/5.0" # Replace with actual commit ID
+      system "git", "checkout", commit_id
     end
 
     cd clone_path do
