@@ -32,7 +32,7 @@ jobs:
 
     - name: Test install formula
       run: |
-        brew install --verbose --build-bottle ./Formula/openfpm.rb
+        brew install --verbose --build-bottle ./openfpm.rb
 
     - name: Bottle formula
       run: |
