@@ -6,7 +6,7 @@ class Openfpm < Formula
       tag:      "version/5.0",  
       revision: "119887983bbfb1bb59a059674f63bae292520989"  
 
-  head "https://github.com/mosaic-group/openfpm.git", branch: "develop"
+  head "https://github.com/mosaic-group/openfpm.git", branch: "master"
   license "BSD-3-Clause"
 
   depends_on "cmake" => :build
