@@ -21,6 +21,16 @@ jobs:
 
     - name: Set up Homebrew
       uses: Homebrew/actions/setup-homebrew@master
+    
+    - name: Cache Homebrew dependencies
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/Library/Caches/Homebrew
+          /home/linuxbrew/.cache/Homebrew
+        key: ${{ runner.os }}-homebrew-${{ hashFiles('**/*.rb') }}
+        restore-keys: |
+          ${{ runner.os }}-homebrew-
 
     - name: Install dependencies
       run: |
