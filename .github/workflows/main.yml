@@ -35,19 +35,27 @@ jobs:
     - name: Install dependencies
       run: |
         brew install cmake ccache petsc boost vc eigen hdf5-mpi
-        brew install abhinavsns/homebrew-openfpm/parmetis
-        brew install abhinavsns/homebrew-openfpm/libhilbert
-        brew install abhinavsns/homebrew-openfpm/blitz
-        brew install abhinavsns/homebrew-openfpm/algoim
+        brew install --build-bottle abhinavsns/homebrew-openfpm/parmetis
+        brew install --build-bottle abhinavsns/homebrew-openfpm/libhilbert
+        brew install --build-bottle abhinavsns/homebrew-openfpm/blitz
+        brew install --build-bottle abhinavsns/homebrew-openfpm/algoim
+        brew postinstall abhinavsns/homebrew-openfpm/parmetis
+        brew postinstall abhinavsns/homebrew-openfpm/libhilbert
+        brew postinstall abhinavsns/homebrew-openfpm/blitz
+        brew postinstall abhinavsns/homebrew-openfpm/algoim
 
     - name: Test install formula
       run: |
         brew install --verbose --build-bottle ./openfpm.rb
+        brew postinstall --verbose ./openfpm.rb
 
     - name: Bottle formula
       run: |
-        brew bottle --json --root-url="https://github.com/mosaic-group/openfpm/releases/download" openfpm
-        brew bottle --merge --write --no-commit ./openfpm--*.json
+        brew bottle abhinavsns/homebrew-openfpm/parmetis
+        brew bottle abhinavsns/homebrew-openfpm/libhilbert
+        brew bottle abhinavsns/homebrew-openfpm/blitz
+        brew bottle abhinavsns/homebrew-openfpm/algoim
+        brew bottle abhinavsns/homebrew-openfpm/openfpm
 
     - name: Upload bottles
       uses: actions/upload-artifact@v2

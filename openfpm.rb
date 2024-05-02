@@ -3,8 +3,8 @@ class Openfpm < Formula
   homepage "https://openfpm.mpi-cbg.de"
   url "https://github.com/mosaic-group/openfpm.git",
       using:    :git,
-      tag:      "version/5.0",  
-      revision: "119887983bbfb1bb59a059674f63bae292520989"  
+      tag:      "v5.0",
+      revision: "f5b3c0e17f13107dc6cfb5eb08984d3a37bcd52a"
 
   head "https://github.com/mosaic-group/openfpm.git", branch: "master"
   license "BSD-3-Clause"

@@ -5,6 +5,7 @@ class Blitz < Formula
   version "1.0.2" 
 
   depends_on "cmake" => :build
+  depends_on "python"
 
   def install
     # Create and move to the build directory
