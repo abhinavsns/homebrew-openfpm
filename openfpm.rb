@@ -41,6 +41,7 @@ class Openfpm < Formula
       mkdir "build" unless File.exist?("build")
       cd "build" do
         system "cmake", "..", *std_cmake_args,
+               "-DCMAKE_PREFIX_PATH=$(brew --prefix)",
                "-DCMAKE_BUILD_TYPE=Release",
                "-DSE_CLASS1=OFF",
                "-DSE_CLASS2=OFF",
