@@ -49,16 +49,16 @@ jobs:
         brew install --verbose --build-bottle ./openfpm.rb
         brew postinstall --verbose ./openfpm.rb
 
-    - name: Bottle formula
-      run: |
-        brew bottle abhinavsns/homebrew-openfpm/parmetis
-        brew bottle abhinavsns/homebrew-openfpm/libhilbert
-        brew bottle abhinavsns/homebrew-openfpm/blitz
-        brew bottle abhinavsns/homebrew-openfpm/algoim
-        brew bottle abhinavsns/homebrew-openfpm/openfpm
+#    - name: Bottle formula
+#      run: |
+#        brew bottle abhinavsns/homebrew-openfpm/parmetis
+#        brew bottle abhinavsns/homebrew-openfpm/libhilbert
+#        brew bottle abhinavsns/homebrew-openfpm/blitz
+#        brew bottle abhinavsns/homebrew-openfpm/algoim
+#        brew bottle abhinavsns/homebrew-openfpm/openfpm
 
-    - name: Upload bottles
-      uses: actions/upload-artifact@v2
-      with:
-        name: bottles
-        path: "*.bottle.*.tar.gz"
+#    - name: Upload bottles
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: bottles
+#        path: "*.bottle.*.tar.gz"

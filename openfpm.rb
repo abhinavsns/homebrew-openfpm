@@ -11,9 +11,10 @@ class Openfpm < Formula
 
   bottle do
       root_url "https://github.com/abhinavsns/homebrew-openfpm/releases/tag/v5.0"
-      rebuild 1
-      sha256 arm64_sonoma: "3c5f01def2800bcb573f043dbaf1b7391f66d44262961c548690cb2a3c526358"
-      sha256 x86_64_linux: "77efb2bbbd26aa84839766eb7cc1e9a161ca15a45d26e2f4281b169ab69a0c23"
+      rebuild 2
+      sha256 cellar: :any, arm64_sonoma: "980b695d36aedca5bb530f58336bf375645cac7ca641b1636f7bae28bc744e35"
+      sha256 cellar: :any, ventura: "194952c29b880de012e847735390744e843fac016f202164910fa35ffbdd98a3"
+      sha256 cellar: :any_skip_relocation, x86_64_linux: "be2f5b45224e81b916bd0fc2ac5c4c7a4d9a96ef6d933167ff516b05bdf19edf"
   end
 
   depends_on "cmake" => :build
