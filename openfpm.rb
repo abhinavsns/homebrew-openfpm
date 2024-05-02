@@ -9,14 +9,6 @@ class Openfpm < Formula
   head "https://github.com/mosaic-group/openfpm.git", branch: "master"
   license "BSD-3-Clause"
 
-  bottle do
-      root_url "https://github.com/abhinavsns/homebrew-openfpm/releases/tag/v5.0"
-      rebuild 2
-      sha256 cellar: :any, arm64_sonoma: "980b695d36aedca5bb530f58336bf375645cac7ca641b1636f7bae28bc744e35"
-      sha256 cellar: :any, ventura: "194952c29b880de012e847735390744e843fac016f202164910fa35ffbdd98a3"
-      sha256 cellar: :any_skip_relocation, x86_64_linux: "7e5c47d31158cfff3ff61b8b3857ac9985086558fa2b9bec5aef2d9089a4ad8f"
-  end
-
   depends_on "cmake" => :build
   depends_on "ccache"
   depends_on "petsc"
