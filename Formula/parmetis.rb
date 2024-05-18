@@ -7,9 +7,9 @@ class Parmetis < Formula
 
   depends_on "cmake" => :build
 
+  depends_on "hdf5-mpi"
   depends_on "metis"
   depends_on "open-mpi"
-  depends_on "hdf5-mpi"
 
   def install
     ENV["LDFLAGS"] = "-L#{Formula["metis"].lib} -lmetis -lm"

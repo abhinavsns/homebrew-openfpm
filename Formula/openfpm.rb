@@ -9,19 +9,19 @@ class Openfpm < Formula
   head "https://github.com/mosaic-group/openfpm.git", branch: "master"
 
   depends_on "cmake" => :build
-  depends_on "ccache"
-  depends_on "petsc"
+  depends_on "abhinavsns/homebrew-openfpm/algoim"
+  depends_on "abhinavsns/homebrew-openfpm/blitz"
+  depends_on "abhinavsns/homebrew-openfpm/libhilbert"
+  depends_on "abhinavsns/homebrew-openfpm/parmetis"
   depends_on "boost"
-  depends_on "vc"
+  depends_on "ccache"
   depends_on "eigen"
   depends_on "hdf5-mpi"
-  depends_on "abhinavsns/homebrew-openfpm/parmetis"
-  depends_on "abhinavsns/homebrew-openfpm/libhilbert"
-  depends_on "abhinavsns/homebrew-openfpm/blitz"
-  depends_on "abhinavsns/homebrew-openfpm/algoim"
+  depends_on "petsc"
+  depends_on "vc"
 
   def install
-    clone_path = Pathname.new("#{ENV["HOME"]}/openfpm_src")
+    clone_path = Pathname.new("#{Dir.home}/openfpm_src")
 
     clone_path.mkpath
 
@@ -30,7 +30,7 @@ class Openfpm < Formula
     end
 
     cd clone_path do
-      ENV["CCACHE_DIR"] = "#{ENV["HOME"]}/.ccache"
+      ENV["CCACHE_DIR"] = "#{Dir.home}/.ccache"
       mkdir_p ENV["CCACHE_DIR"]
       ENV["CXX"] = "mpic++"
       mkdir "build" unless File.exist?("build")
