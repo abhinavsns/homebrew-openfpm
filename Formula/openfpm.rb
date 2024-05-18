@@ -17,6 +17,9 @@ class Openfpm < Formula
   depends_on "ccache"
   depends_on "eigen"
   depends_on "hdf5-mpi"
+  depends_on "libomp"
+  depends_on "open-mpi"
+  depends_on "openblas"
   depends_on "petsc"
   depends_on "vc"
 
