@@ -1,5 +1,5 @@
 class Openfpm < Formula
-  desc "openfpm: Open scalable framework for particle and mesh simulations on heterogeneous architectures"
+  desc "Open scalable framework for particle and mesh simulations on heterogeneous architectures"
   homepage "https://openfpm.mpi-cbg.de"
   url "https://github.com/mosaic-group/openfpm.git",
       using:    :git,

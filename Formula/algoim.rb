@@ -1,5 +1,5 @@
 class Algoim < Formula
-  desc "Algoim"
+  desc "Levelset functionality"
   homepage "https://github.com/algoim/algoim"
   url "http://ppmcore.mpi-cbg.de/upload/algoim.tar.gz"
   version "1.0.0"
