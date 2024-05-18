@@ -1,9 +1,13 @@
 class Libhilbert < Formula
   desc "Library producing Hilbert indices for multidimensional data"
   homepage "https://github.com/pdebuyl/libhilbert"
-  url "http://ppmcore.mpi-cbg.de/upload/libhilbert-master.tar.gz"
   version "1.0.0"
-  sha256 "546d5dec403d7ed1e71706ee39e10d69496a6753eb7f116afe1089d85dc9c35a"
+  url "https://github.com/pdebuyl/libhilbert",
+      using:    :git,
+      branch: "master",
+      revision: "19d8857093153e7eff3bf3d31e762a6f57c645d7"
+  license "BSD-3-Clause"
+  revision 1
 
   # Add any dependencies here, for example:
   depends_on "cmake" => :build

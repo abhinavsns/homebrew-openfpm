@@ -1,6 +1,6 @@
 class Openfpm < Formula
   desc "Open scalable framework simulations on heterogeneous architectures"
-  homepage "https://openfpm.mpi-cbg.de"
+  homepage "http://openfpm.mpi-cbg.de"
   url "https://github.com/mosaic-group/openfpm.git",
       using:    :git,
       tag:      "v5.0",
