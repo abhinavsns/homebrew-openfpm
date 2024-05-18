@@ -5,8 +5,6 @@ class Algoim < Formula
   version "1.0.0"
   sha256 "408e6dda7cae51c593c7cb264448de38d1b9fa1e2fc09e5dbac342970659a111"
 
-  depends_on "cmake" => :build
-
   def install
     (include/"algoim").mkpath
     Dir["include/*"].each { |path| (include/"algoim").install path }
