@@ -18,7 +18,7 @@ class Parmetis < Formula
     pkgshare.install "Graphs" # Sample data for test
   end
 
-  #test do
+  # test do
   #  system "mpirun", "#{bin}/ptest", "#{pkgshare}/Graphs/rotor.graph"
-  #end
+  # end
 end
