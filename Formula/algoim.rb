@@ -6,6 +6,6 @@ class Algoim < Formula
   sha256 "408e6dda7cae51c593c7cb264448de38d1b9fa1e2fc09e5dbac342970659a111"
 
   def install
-    (include).install Dir["src/*"]
+    include.install Dir["src/*"]
   end
 end
