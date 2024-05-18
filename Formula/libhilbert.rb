@@ -1,11 +1,11 @@
 class Libhilbert < Formula
   desc "Library producing Hilbert indices for multidimensional data"
   homepage "https://github.com/pdebuyl/libhilbert"
-  version "1.0.0"
   url "https://github.com/pdebuyl/libhilbert",
       using:    :git,
-      branch: "master",
+      branch:   "master",
       revision: "19d8857093153e7eff3bf3d31e762a6f57c645d7"
+  version "1.0.0"
   license "BSD-3-Clause"
   revision 1
 
