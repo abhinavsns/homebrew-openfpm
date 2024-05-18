@@ -25,15 +25,13 @@ class Openfpm < Formula
 
     clone_path.mkpath
 
-    unless clone_path.exist? && !clone_path.children.empty?
-      system "git", "clone", "--recursive", "https://github.com/mosaic-group/openfpm.git", clone_path
-    end
+    system "git", "clone", "--recursive", "https://github.com/mosaic-group/openfpm.git", clone_path
 
     cd clone_path do
       ENV["CCACHE_DIR"] = "#{Dir.home}/.ccache"
       mkdir_p ENV["CCACHE_DIR"]
       ENV["CXX"] = "mpic++"
-      FileUtils.mkdir_p "build"
+      mkdir_p "build"
       cd "build" do
         system "cmake", "..", *std_cmake_args,
                "-DCMAKE_PREFIX_PATH=$(brew --prefix)",
