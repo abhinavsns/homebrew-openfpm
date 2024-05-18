@@ -5,7 +5,8 @@ This repository contains the homebrew formula for OpenFPM and it dependencies.
 ## Installation
 ```
 brew tap abhinavsns/homebrew-openfpm
-brew install abhinavsns/homebrew-openfpm/openfpm
+brew install openfpm
+
 ```
 After successful compilation, we have to create the example.mk file in the `$HOME` folder as `.ofpexample.mk`. This can be done by running `create_brew.mk.sh` from the repo. In a future release this will be eliminated via CMake:
 
