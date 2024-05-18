@@ -6,7 +6,6 @@ class Libhilbert < Formula
       branch:   "master",
       revision: "64efb35aa5d194ca3fec4c9d79e552838476e543"
   version "1.0.0"
-  license "BSD-3-Clause"
   revision 1
 
   # Add any dependencies here, for example:
