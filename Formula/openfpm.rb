@@ -1,13 +1,12 @@
 class Openfpm < Formula
-  desc "Open scalable framework for particle and mesh simulations on heterogeneous architectures"
+  desc "Open scalable framework simulations on heterogeneous architectures"
   homepage "https://openfpm.mpi-cbg.de"
   url "https://github.com/mosaic-group/openfpm.git",
       using:    :git,
       tag:      "v5.0",
       revision: "1c9ed20d1e8e42a571d1825f943991c34acacc74"
-
-  head "https://github.com/mosaic-group/openfpm.git", branch: "master"
   license "BSD-3-Clause"
+  head "https://github.com/mosaic-group/openfpm.git", branch: "master"
 
   depends_on "cmake" => :build
   depends_on "ccache"
@@ -22,13 +21,10 @@ class Openfpm < Formula
   depends_on "abhinavsns/homebrew-openfpm/algoim"
 
   def install
-    # Define custom clone path
     clone_path = Pathname.new("#{ENV["HOME"]}/openfpm_src")
 
-    # Ensure the clone path directory exists
     clone_path.mkpath
 
-    # Clone the repository only if it hasn't been cloned already
     unless clone_path.exist? && !clone_path.children.empty?
       system "git", "clone", "--recursive", "https://github.com/mosaic-group/openfpm.git", clone_path
     end
@@ -37,7 +33,6 @@ class Openfpm < Formula
       ENV["CCACHE_DIR"] = "#{ENV["HOME"]}/.ccache"
       mkdir_p ENV["CCACHE_DIR"]
       ENV["CXX"] = "mpic++"
-      # Create and move to the build directory
       mkdir "build" unless File.exist?("build")
       cd "build" do
         system "cmake", "..", *std_cmake_args,
