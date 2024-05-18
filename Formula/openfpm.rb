@@ -33,7 +33,7 @@ class Openfpm < Formula
       ENV["CCACHE_DIR"] = "#{Dir.home}/.ccache"
       mkdir_p ENV["CCACHE_DIR"]
       ENV["CXX"] = "mpic++"
-      mkdir "build" unless File.exist?("build")
+      FileUtils.mkdir_p "build"
       cd "build" do
         system "cmake", "..", *std_cmake_args,
                "-DCMAKE_PREFIX_PATH=$(brew --prefix)",
