@@ -22,7 +22,7 @@ LIBS_PATH=""
 LIBS=""
 
 # Dependencies array. Ensure these are the correct formula names in Homebrew.
-depends=("petsc" "parmetis" "metis" "libhilbert" "boost" "vc" "blitz" "algoim" "suitesparse" "libomp")
+depends=("petsc" "parmetis" "metis" "hdf5" "libhilbert" "boost" "vc" "blitz" "algoim" "suitesparse" "libomp")
 
 # Add paths for each dependency
 for dep in "${depends[@]}"; do
@@ -44,13 +44,13 @@ INCLUDE_PATH="$INCLUDE_PATH -I$dep_prefix/openfpm_numerics/include -I$dep_prefix
 LIBS_PATH="$LIBS_PATH -L$dep_prefix/openfpm_devices/lib -L$dep_prefix/openfpm_pdata/lib -L$dep_prefix/openfpm_vcluster/lib"
 
 # Generate example.mk
-echo "INCLUDE_PATH=$INCLUDE_PATH" > ~/.ofpexample.mk
-echo "LIBS_PATH=$LIBS_PATH" >> ~/.ofpexample.mk
-echo "LIBS=$LIBS" >> ~/.ofpexample.mk
+echo "INCLUDE_PATH=$INCLUDE_PATH" > ~/example.mk
+echo "LIBS_PATH=$LIBS_PATH" >> ~/example.mk
+echo "LIBS=$LIBS" >> ~/example.mk
 
 # Handle CUDA_ON_CPU flag
 CUDA_ON_CPU=NO  # Default setting
 if [ x"$cuda_on_cpu" == x"YES" ]; then
    CUDA_ON_CPU=YES
 fi
-echo "CUDA_ON_CPU=$CUDA_ON_CPU" >> ~/.ofpexample.mk
+echo "CUDA_ON_CPU=$CUDA_ON_CPU" >> ~/example.mk
