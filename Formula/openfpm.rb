@@ -60,7 +60,7 @@ class Openfpm < Formula
                "-DMPI_VENDOR=openmpi",
                "-DMPI_ROOT=#{Formula["petsc"].opt_prefix}",
                "-DPETSC_ROOT=#{Formula["petsc"].opt_prefix}",
-               "-DBOOST_ROOT=#{Formula["boost"].opt_prefix}",
+               "-DBOOST_ROOT=#{Formula["boost@1.85"].opt_prefix}",
                "-DBoost_NO_BOOST_CMAKE=ON",
                "-DHDF5_ROOT=#{Formula["hdf5-mpi"].opt_prefix}",
                "-DLIBHILBERT_ROOT=#{Formula["abhinavsns/homebrew-openfpm/libhilbert"].opt_prefix}",
