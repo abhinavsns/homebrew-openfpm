@@ -21,7 +21,7 @@ class Openfpm < Formula
   depends_on "abhinavsns/homebrew-openfpm/blitz"
   depends_on "abhinavsns/homebrew-openfpm/libhilbert"
   depends_on "abhinavsns/homebrew-openfpm/parmetis"
-  depends_on "boost"
+  depends_on "boost@1.85"
   depends_on "ccache"
   depends_on "eigen"
   depends_on "hdf5-mpi"
