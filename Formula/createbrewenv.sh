@@ -54,3 +54,4 @@ if [ x"$cuda_on_cpu" == x"YES" ]; then
    CUDA_ON_CPU=YES
 fi
 echo "CUDA_ON_CPU=$CUDA_ON_CPU" >> ~/example.mk
+cp ~/example.mk ~/.ofpexample.mk
