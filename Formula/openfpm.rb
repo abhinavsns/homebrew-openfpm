@@ -36,7 +36,7 @@ class Openfpm < Formula
 
     clone_path.mkpath
 
-    system "git", "clone", "--recursive","--branch v5.0", "https://github.com/mosaic-group/openfpm.git", clone_path
+    system "git", "clone", "--recursive", "--branch v5.0", "https://github.com/mosaic-group/openfpm.git", clone_path
 
     cd clone_path do
       ENV["CCACHE_DIR"] = "#{Dir.home}/.ccache"
