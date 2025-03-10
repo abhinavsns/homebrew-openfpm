@@ -2,18 +2,16 @@
 
 # Function to find and add a dependency's include and lib paths
 add_dependency_paths() {
-  local dep_prefix=$(brew --prefix "$1")
-
   # Include paths
-  if [[ -d "${dep_prefix}/include" ]]
+  if [[ -d "$(brew --prefix "$1")/include" ]]
   then
-    INCLUDE_PATH="${INCLUDE_PATH} -I${dep_prefix}/include"
+    INCLUDE_PATH="${INCLUDE_PATH} -I$(brew --prefix "$1")/include"
   fi
 
   # Library paths
-  if [[ -d "${dep_prefix}/lib" ]]
+  if [[ -d "$(brew --prefix "$1")/lib" ]]
   then
-    LIBS_PATH="${LIBS_PATH} -L${dep_prefix}/lib"
+    LIBS_PATH="${LIBS_PATH} -L$(brew --prefix "$1")/lib"
     # Add library link flags as necessary. You might need a specific approach to determine the library names.
   fi
 }
@@ -52,9 +50,6 @@ echo "LIBS=${LIBS}" >>~/example.mk
 
 # Handle CUDA_ON_CPU flag
 CUDA_ON_CPU=NO # Default setting
-if [[ "${cuda_on_cpu}" == "YES" ]]
-then
-  CUDA_ON_CPU=YES
-fi
+
 echo "CUDA_ON_CPU=${CUDA_ON_CPU}" >>~/example.mk
 cp ~/example.mk ~/.ofpexample.mk
