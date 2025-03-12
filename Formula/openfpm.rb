@@ -32,49 +32,41 @@ class Openfpm < Formula
   depends_on "vc"
 
   def install
-    clone_path = Pathname.new("#{Dir.home}/openfpm_src")
-
-    clone_path.mkpath
-
-    system "git", "clone", "--recursive", "--branch v5.0", "https://github.com/mosaic-group/openfpm.git", clone_path
-
-    cd clone_path do
-      ENV["CCACHE_DIR"] = "#{Dir.home}/.ccache"
-      mkdir_p ENV["CCACHE_DIR"]
-      ENV["CXX"] = "mpic++"
-      mkdir_p "build"
-      cd "build" do
-        system "cmake", "..", *std_cmake_args,
-               "-DCMAKE_PREFIX_PATH=$(brew --prefix)",
-               "-DCMAKE_BUILD_TYPE=Release",
-               "-DSE_CLASS1=OFF",
-               "-DSE_CLASS2=OFF",
-               "-DSE_CLASS3=OFF",
-               "-DTEST_COVERAGE=OFF",
-               "-DSCAN_COVERTY=OFF",
-               "-DTEST_PERFORMANCE=OFF",
-               "-DENABLE_ASAN=OFF",
-               "-DENABLE_NUMERICS=ON",
-               "-DENABLE_GARBAGE_INJECTOR=OFF",
-               "-DENABLE_VCLUSTER_GARBAGE_INJECTOR=OFF",
-               "-DMPI_VENDOR=openmpi",
-               "-DMPI_ROOT=#{Formula["petsc"].opt_prefix}",
-               "-DPETSC_ROOT=#{Formula["petsc"].opt_prefix}",
-               "-DBOOST_ROOT=#{Formula["boost@1.85"].opt_prefix}",
-               "-DBoost_NO_BOOST_CMAKE=ON",
-               "-DHDF5_ROOT=#{Formula["hdf5-mpi"].opt_prefix}",
-               "-DLIBHILBERT_ROOT=#{Formula["abhinavsns/homebrew-openfpm/libhilbert"].opt_prefix}",
-               "-DBLITZ_ROOT=#{Formula["abhinavsns/homebrew-openfpm/blitz"].opt_prefix}",
-               "-DALGOIM_ROOT=#{Formula["abhinavsns/homebrew-openfpm/algoim"].opt_prefix}",
-               "-DPARMETIS_ROOT=#{Formula["abhinavsns/homebrew-openfpm/parmetis"].opt_prefix}",
-               "-DMETIS_ROOT=#{Formula["metis"].opt_prefix}",
-               "-DOPENBLAS_ROOT=#{Formula["openblas"].opt_prefix}",
-               "-DSUITESPARSE_ROOT=#{Formula["suite-sparse"].opt_prefix}",
-               "-DEIGEN3_ROOT=#{Formula["eigen"].opt_prefix}",
-               "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache",
-               "-DCMAKE_C_COMPILER_LAUNCHER=ccache"
-        system "make", "install"
-      end
+    ENV["CCACHE_DIR"] = "#{Dir.home}/.ccache"
+    mkdir_p ENV["CCACHE_DIR"]
+    ENV["CXX"] = "mpic++"
+    mkdir_p "build"
+    cd "build" do
+      system "cmake", "..", *std_cmake_args,
+              "-DCMAKE_PREFIX_PATH=$(brew --prefix)",
+              "-DCMAKE_BUILD_TYPE=Release",
+              "-DSE_CLASS1=OFF",
+              "-DSE_CLASS2=OFF",
+              "-DSE_CLASS3=OFF",
+              "-DTEST_COVERAGE=OFF",
+              "-DSCAN_COVERTY=OFF",
+              "-DTEST_PERFORMANCE=OFF",
+              "-DENABLE_ASAN=OFF",
+              "-DENABLE_NUMERICS=ON",
+              "-DENABLE_GARBAGE_INJECTOR=OFF",
+              "-DENABLE_VCLUSTER_GARBAGE_INJECTOR=OFF",
+              "-DMPI_VENDOR=openmpi",
+              "-DMPI_ROOT=#{Formula["petsc"].opt_prefix}",
+              "-DPETSC_ROOT=#{Formula["petsc"].opt_prefix}",
+              "-DBOOST_ROOT=#{Formula["boost@1.85"].opt_prefix}",
+              "-DBoost_NO_BOOST_CMAKE=ON",
+              "-DHDF5_ROOT=#{Formula["hdf5-mpi"].opt_prefix}",
+              "-DLIBHILBERT_ROOT=#{Formula["abhinavsns/homebrew-openfpm/libhilbert"].opt_prefix}",
+              "-DBLITZ_ROOT=#{Formula["abhinavsns/homebrew-openfpm/blitz"].opt_prefix}",
+              "-DALGOIM_ROOT=#{Formula["abhinavsns/homebrew-openfpm/algoim"].opt_prefix}",
+              "-DPARMETIS_ROOT=#{Formula["abhinavsns/homebrew-openfpm/parmetis"].opt_prefix}",
+              "-DMETIS_ROOT=#{Formula["metis"].opt_prefix}",
+              "-DOPENBLAS_ROOT=#{Formula["openblas"].opt_prefix}",
+              "-DSUITESPARSE_ROOT=#{Formula["suite-sparse"].opt_prefix}",
+              "-DEIGEN3_ROOT=#{Formula["eigen"].opt_prefix}",
+              "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache",
+              "-DCMAKE_C_COMPILER_LAUNCHER=ccache"
+      system "make", "install"
     end
   end
 end
