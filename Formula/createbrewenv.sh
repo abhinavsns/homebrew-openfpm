@@ -3,13 +3,13 @@
 # Function to find and add a dependency's include and lib paths
 add_dependency_paths() {
   # Include paths
-  if [[ -d "$(brew --prefix "$1")/include" ]]
+  if [[ -d "$(brew --prefix "$1" || true)/include" ]]
   then
     INCLUDE_PATH="${INCLUDE_PATH} -I$(brew --prefix "$1")/include"
   fi
 
   # Library paths
-  if [[ -d "$(brew --prefix "$1")/lib" ]]
+  if [[ -d "$(brew --prefix "$1" || true)/lib" ]]
   then
     LIBS_PATH="${LIBS_PATH} -L$(brew --prefix "$1")/lib"
     # Add library link flags as necessary. You might need a specific approach to determine the library names.
