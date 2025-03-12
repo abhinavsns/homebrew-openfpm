@@ -66,7 +66,7 @@ class Openfpm < Formula
               "-DEIGEN3_ROOT=#{Formula["eigen"].opt_prefix}",
               "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache",
               "-DCMAKE_C_COMPILER_LAUNCHER=ccache"
-      system "make", "install"
+      system "make", "-j2", "install"
     end
   end
 end
