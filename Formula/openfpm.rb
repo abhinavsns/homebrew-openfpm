@@ -24,7 +24,6 @@ class Openfpm < Formula
   depends_on "boost@1.85"
   depends_on "ccache"
   depends_on "eigen"
-  depends_on "gcc@11"
   depends_on "hdf5-mpi"
   depends_on "libomp"
   depends_on "open-mpi"
@@ -37,14 +36,7 @@ class Openfpm < Formula
     mkdir_p ENV["CCACHE_DIR"]
     mkdir_p "build"
     ENV.prepend_path "PATH", Formula["open-mpi"].opt_bin
-    if OS.linux?
-        ENV["OMPI_CC"] = "gcc-15"
-        ENV["OMPI_CXX"] = "g++-15"
-        ENV["CC"] = "gcc-15"
-        ENV["CXX"] = "g++-15"
-    else
-        ENV["CXX"] = "g++"
-    end
+    ENV["CXX"] = "g++"
     cd "build" do
       system "cmake", "..", *std_cmake_args,
               "-DCMAKE_PREFIX_PATH=$(brew --prefix)",
