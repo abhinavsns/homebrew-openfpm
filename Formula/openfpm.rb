@@ -40,7 +40,7 @@ class Openfpm < Formula
     mkdir_p "build"
     cd "build" do
       system "cmake", "..", *std_cmake_args,
-              "-DCMAKE_PREFIX_PATH=$(brew --prefix)",
+              "-DCMAKE_PREFIX_PATH=$(brew --prefix):$(brew --prefix open-mpi)/bin",
               "-DCMAKE_BUILD_TYPE=Release",
               "-DSE_CLASS1=OFF",
               "-DSE_CLASS2=OFF",
