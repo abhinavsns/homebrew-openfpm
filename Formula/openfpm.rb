@@ -35,12 +35,13 @@ class Openfpm < Formula
   def install
     ENV["CCACHE_DIR"] = "#{Dir.home}/.ccache"
     ENV.prepend_path "PATH", Formula["open-mpi"].opt_bin
-    ENV["CXX"] = OS.linux? ? "g++-11" : "mpic++"
+    ENV["CXX"] = OS.linux? ? "g++" : "mpic++"
+    mpi_prefix = Formula["open-mpi"].opt_prefix
     mkdir_p ENV["CCACHE_DIR"]
     mkdir_p "build"
     cd "build" do
       system "cmake", "..", *std_cmake_args,
-              "-DCMAKE_PREFIX_PATH=$(brew --prefix):$(brew --prefix open-mpi)/bin",
+              "-DCMAKE_PREFIX_PATH=$(brew --prefix)",
               "-DCMAKE_BUILD_TYPE=Release",
               "-DSE_CLASS1=OFF",
               "-DSE_CLASS2=OFF",
@@ -53,8 +54,8 @@ class Openfpm < Formula
               "-DENABLE_GARBAGE_INJECTOR=OFF",
               "-DENABLE_VCLUSTER_GARBAGE_INJECTOR=OFF",
               "-DMPI_VENDOR=openmpi",
-              "-DMPI_CXX_COMPILER=mpic++",
-              "-DMPI_C_COMPILER=mpicc",
+              "-DMPI_CXX_COMPILER=#{Formula["petsc"].opt_bin}/mpic++",
+              "-DMPI_C_COMPILER=#{Formula["petsc"].opt_bin}/mpicc",
               "-DMPI_ROOT=#{Formula["petsc"].opt_prefix}",
               "-DPETSC_ROOT=#{Formula["petsc"].opt_prefix}",
               "-DBOOST_ROOT=#{Formula["boost@1.85"].opt_prefix}",
