@@ -55,7 +55,7 @@ class Openfpm < Formula
         -DCMAKE_C_COMPILER=#{cc}
         -DCMAKE_CXX_COMPILER=#{cxx}
         -DMPI_C_COMPILER=#{Formula["open-mpi"].opt_bin/"mpicc"}
-        -DMPI_CXX_COMPILER=#{Formula["open-mpi"].opt_bin/"mpicxx"}
+        -DMPI_CXX_COMPILER=#{Formula["open-mpi"].opt_bin/"mpic++"}
         -DCMAKE_BUILD_TYPE=Release
         -DSE_CLASS1=OFF -DSE_CLASS2=OFF -DSE_CLASS3=OFF
         -DTEST_COVERAGE=OFF -DSCAN_COVERTY=OFF -DTEST_PERFORMANCE=OFF
