@@ -37,6 +37,12 @@ class Openfpm < Formula
     mkdir_p ENV["CCACHE_DIR"]
     mkdir_p "build"
     ENV.prepend_path "PATH", Formula["open-mpi"].opt_bin
+    if OS.linux?
+        ENV["CC"] = "/usr/bin/gcc-15"
+        ENV["CXX"] = "/usr/bin/g++-15"
+    else
+        ENV["CXX"] = "g++"
+    end
     cd "build" do
       system "cmake", "..", *std_cmake_args,
               "-DCMAKE_C_COMPILER=mpicc",
