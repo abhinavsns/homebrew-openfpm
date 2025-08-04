@@ -37,16 +37,10 @@ class Openfpm < Formula
     mkdir_p ENV["CCACHE_DIR"]
     mkdir_p "build"
     ENV.prepend_path "PATH", Formula["open-mpi"].opt_bin
-    if OS.linux?
-        ENV["CC"] = "/usr/bin/gcc-11"
-        ENV["CXX"] = "/usr/bin/g++-11"
-    else
-        ENV["CXX"] = "g++"
-    end
     cd "build" do
       system "cmake", "..", *std_cmake_args,
-              "-DCMAKE_C_COMPILER=/usr/bin/gcc-11",
-              "-DCMAKE_CXX_COMPILER=/usr/bin/g++-11",
+              "-DCMAKE_C_COMPILER=mpicc",
+              "-DCMAKE_CXX_COMPILER=mpic++",
               "-DCMAKE_PREFIX_PATH=$(brew --prefix)",
               "-DCMAKE_BUILD_TYPE=Release",
               "-DSE_CLASS1=OFF",
@@ -60,9 +54,7 @@ class Openfpm < Formula
               "-DENABLE_GARBAGE_INJECTOR=OFF",
               "-DENABLE_VCLUSTER_GARBAGE_INJECTOR=OFF",
               "-DMPI_VENDOR=openmpi",
-              "-DMPI_CXX_COMPILER=#{Formula["open-mpi"].opt_bin}/mpic++",
-              "-DMPI_C_COMPILER=#{Formula["open-mpi"].opt_bin}/mpicc",
-              "-DMPI_ROOT=#{Formula["petsc"].opt_prefix}",
+              "-DMPI_ROOT=#{Formula["open-mpi"].opt_prefix}",
               "-DPETSC_ROOT=#{Formula["petsc"].opt_prefix}",
               "-DBOOST_ROOT=#{Formula["boost@1.85"].opt_prefix}",
               "-DBoost_NO_BOOST_CMAKE=ON",
