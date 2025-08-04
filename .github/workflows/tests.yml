@@ -4,14 +4,13 @@ on:
   push:
     branches:
       - main
-      - style-fix
   pull_request:
 
 jobs:
   test-bot:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, macos-13]
+        os: [ubuntu-22.04, macos-latest, macos-13]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Set up Homebrew
