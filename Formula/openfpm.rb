@@ -35,7 +35,7 @@ class Openfpm < Formula
   def install
     ENV["CCACHE_DIR"] = "#{Dir.home}/.ccache"
     ENV.prepend_path "PATH", Formula["open-mpi"].opt_bin
-    ENV["CXX"] = "mpic++"
+    ENV["CXX"] = OS.linux? ? "g++-11" : "mpic++"
     mkdir_p ENV["CCACHE_DIR"]
     mkdir_p "build"
     cd "build" do
@@ -53,6 +53,7 @@ class Openfpm < Formula
               "-DENABLE_GARBAGE_INJECTOR=OFF",
               "-DENABLE_VCLUSTER_GARBAGE_INJECTOR=OFF",
               "-DMPI_VENDOR=openmpi",
+              "-DMPI_ROOT=#{Formula["petsc"].opt_prefix}",
               "-DPETSC_ROOT=#{Formula["petsc"].opt_prefix}",
               "-DBOOST_ROOT=#{Formula["boost@1.85"].opt_prefix}",
               "-DBoost_NO_BOOST_CMAKE=ON",
