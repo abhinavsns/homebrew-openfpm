@@ -16,6 +16,7 @@ class Openfpm < Formula
     sha256 cellar: :any_skip_relocation, x86_64_linux: "dcecae12455b91a7ef92133f1e1ab8409cb840ef08f0c6b7251758f9c896dfef"
   end
 
+  env :std
   depends_on "cmake" => :build
   depends_on "abhinavsns/homebrew-openfpm/algoim"
   depends_on "abhinavsns/homebrew-openfpm/blitz"
@@ -36,7 +37,6 @@ class Openfpm < Formula
     mkdir_p ENV["CCACHE_DIR"]
     mkdir_p "build"
     ENV.prepend_path "PATH", Formula["open-mpi"].opt_bin
-    ENV["CXX"] = "g++"
     cd "build" do
       system "cmake", "..", *std_cmake_args,
               "-DCMAKE_PREFIX_PATH=$(brew --prefix)",
