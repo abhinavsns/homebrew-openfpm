@@ -53,6 +53,8 @@ class Openfpm < Formula
               "-DENABLE_GARBAGE_INJECTOR=OFF",
               "-DENABLE_VCLUSTER_GARBAGE_INJECTOR=OFF",
               "-DMPI_VENDOR=openmpi",
+              "-DMPI_CXX_COMPILER=mpic++",
+              "-DMPI_C_COMPILER=mpicc",
               "-DMPI_ROOT=#{Formula["petsc"].opt_prefix}",
               "-DPETSC_ROOT=#{Formula["petsc"].opt_prefix}",
               "-DBOOST_ROOT=#{Formula["boost@1.85"].opt_prefix}",
