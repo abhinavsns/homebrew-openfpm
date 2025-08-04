@@ -37,8 +37,8 @@ class Openfpm < Formula
     ENV.prepend_path "PATH", Formula["open-mpi"].opt_bin
     ENV["CC"] = "gcc"
     ENV["CXX"] = "g++"
-    ENV["HOMEBREW_CC"] = OS.linux? ? "gcc"
-    ENV["HOMEBREW_CXX"] = OS.linux? ? "g++"
+    ENV["HOMEBREW_CC"] = OS.linux? ? "gcc" : ENV["HOMEBREW_CC"]
+    ENV["HOMEBREW_CXX"] = OS.linux? ? "g++": ENV["HOMEBREW_CXX"]
 
     mpi_prefix = Formula["open-mpi"].opt_prefix
     mkdir_p ENV["CCACHE_DIR"]
