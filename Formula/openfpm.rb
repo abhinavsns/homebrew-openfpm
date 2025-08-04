@@ -3,8 +3,8 @@ class Openfpm < Formula
   homepage "http://openfpm.mpi-cbg.de"
   url "https://github.com/mosaic-group/openfpm.git",
       using:    :git,
-      tag:      "v5.0",
-      revision: "1c9ed20d1e8e42a571d1825f943991c34acacc74"
+      tag:      "v5.0.1",
+      revision: "afb3b5638f2ca299601f5c89e94fee7602b41f35"
   license "BSD-3-Clause"
   head "https://github.com/mosaic-group/openfpm.git", branch: "master"
 
@@ -21,6 +21,7 @@ class Openfpm < Formula
   depends_on "abhinavsns/homebrew-openfpm/blitz"
   depends_on "abhinavsns/homebrew-openfpm/libhilbert"
   depends_on "abhinavsns/homebrew-openfpm/parmetis"
+  depends_on "gcc@11"
   depends_on "boost@1.85"
   depends_on "ccache"
   depends_on "eigen"
