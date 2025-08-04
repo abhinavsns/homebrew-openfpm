@@ -45,8 +45,6 @@ class Openfpm < Formula
     end
     cd "build" do
       system "cmake", "..", *std_cmake_args,
-              "-DCMAKE_C_COMPILER=mpicc",
-              "-DCMAKE_CXX_COMPILER=mpic++",
               "-DCMAKE_PREFIX_PATH=$(brew --prefix)",
               "-DCMAKE_BUILD_TYPE=Release",
               "-DSE_CLASS1=OFF",
