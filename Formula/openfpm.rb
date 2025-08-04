@@ -38,6 +38,8 @@ class Openfpm < Formula
     mkdir_p "build"
     ENV.prepend_path "PATH", Formula["open-mpi"].opt_bin
     if OS.linux?
+        ENV["OMPI_CC"] = "gcc-15"
+        ENV["OMPI_CXX"] = "g++-15"
         ENV["CC"] = "gcc-15"
         ENV["CXX"] = "g++-15"
     else
@@ -46,6 +48,8 @@ class Openfpm < Formula
     cd "build" do
       system "cmake", "..", *std_cmake_args,
               "-DCMAKE_PREFIX_PATH=$(brew --prefix)",
+              "-DMPI_C_COMPILER=$(brew --prefix open-mpi)/bin/mpicc",
+              "-DMPI_CXX_COMPILER=$(brew --prefix open-mpi)/bin/mpicxx"              ,
               "-DCMAKE_BUILD_TYPE=Release",
               "-DSE_CLASS1=OFF",
               "-DSE_CLASS2=OFF",
