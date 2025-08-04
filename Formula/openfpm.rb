@@ -35,8 +35,11 @@ class Openfpm < Formula
   def install
     ENV["CCACHE_DIR"] = "#{Dir.home}/.ccache"
     ENV.prepend_path "PATH", Formula["open-mpi"].opt_bin
-    ENV["CC"] = OS.linux? ? "gcc" : "mpicc"
-    ENV["CXX"] = OS.linux? ? "g++" : "mpic++"
+    ENV["CC"] = "gcc"
+    ENV["CXX"] = "g++"
+    ENV["HOMEBREW_CC"] = OS.linux? ? "gcc"
+    ENV["HOMEBREW_CXX"] = OS.linux? ? "g++"
+
     mpi_prefix = Formula["open-mpi"].opt_prefix
     mkdir_p ENV["CCACHE_DIR"]
     mkdir_p "build"
