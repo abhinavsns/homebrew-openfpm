@@ -34,21 +34,19 @@ class Openfpm < Formula
 
   def install
     ENV["CCACHE_DIR"] = "#{Dir.home}/.ccache"
+    mkdir_p ENV["CCACHE_DIR"]
+    mkdir_p "build"
     ENV.prepend_path "PATH", Formula["open-mpi"].opt_bin
     if OS.linux?
         ENV["CC"] = "/usr/bin/gcc-11"
         ENV["CXX"] = "/usr/bin/g++-11"
-        ENV["OBJC"] = "/usr/bin/gcc-11"
-        ENV["OBJCXX"] = "/usr/bin/g++-11"
-        mkdir_p ENV["CCACHE_DIR"]
-        mkdir_p "build"
     else
         ENV["CXX"] = "g++"
     end
     cd "build" do
       system "cmake", "..", *std_cmake_args,
-              "-DCMAKE_C_COMPILER=/usr/bin/gcc",
-              "-DCMAKE_CXX_COMPILER=/usr/bin/g++",
+              "-DCMAKE_C_COMPILER=/usr/bin/gcc-11",
+              "-DCMAKE_CXX_COMPILER=/usr/bin/g++-11",
               "-DCMAKE_PREFIX_PATH=$(brew --prefix)",
               "-DCMAKE_BUILD_TYPE=Release",
               "-DSE_CLASS1=OFF",
