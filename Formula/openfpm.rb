@@ -35,7 +35,6 @@ class Openfpm < Formula
   def install
     ENV["CCACHE_DIR"] = "#{Dir.home}/.ccache"
     mkdir_p ENV["CCACHE_DIR"]
-    ENV["CXX"] = "mpic++"
     mkdir_p "build"
     cd "build" do
       system "cmake", "..", *std_cmake_args,
