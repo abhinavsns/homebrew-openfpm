@@ -4,7 +4,7 @@ class Openfpm < Formula
   url "https://github.com/mosaic-group/openfpm.git",
       using:    :git,
       tag:      "v5.0.1",
-      revision: "afb3b5638f2ca299601f5c89e94fee7602b41f35"
+      revision: "bd6a861e206fb180743de3811f683a7dfc15cacf"
   license "BSD-3-Clause"
   head "https://github.com/mosaic-group/openfpm.git", branch: "master"
 
