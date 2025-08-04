@@ -38,7 +38,7 @@ class Openfpm < Formula
     ENV["CC"] = "/usr/bin/gcc"
     ENV["CXX"] = "/usr/bin/g++"
     ENV["OBJC"] = "/usr/bin/gcc"
-    ENV["OBJCXX"} = "/usr/bin/g++"
+    ENV["OBJCXX"] = "/usr/bin/g++"
     mkdir_p ENV["CCACHE_DIR"]
     mkdir_p "build"
     cd "build" do
