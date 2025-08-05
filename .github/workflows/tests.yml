@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - style-fix
   pull_request:
 
 jobs:
