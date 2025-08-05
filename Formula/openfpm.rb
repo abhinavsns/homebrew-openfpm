@@ -37,10 +37,6 @@ class Openfpm < Formula
     ENV["CXX"] = "#{Formula["open-mpi"].opt_bin}/mpic++"
     mkdir "build" do
       args = std_cmake_args + %W[
-        -DCMAKE_C_COMPILER=gcc
-        -DCMAKE_CXX_COMPILER=g++
-        -DMPI_C_COMPILER=mpicc
-        -DMPI_CXX_COMPILER=mpic++
         -DCMAKE_BUILD_TYPE=Release
         -DSE_CLASS1=OFF -DSE_CLASS2=OFF -DSE_CLASS3=OFF
         -DTEST_COVERAGE=OFF -DSCAN_COVERTY=OFF -DTEST_PERFORMANCE=OFF
