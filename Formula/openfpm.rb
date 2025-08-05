@@ -16,6 +16,7 @@ class Openfpm < Formula
     sha256 cellar: :any_skip_relocation, x86_64_linux: "dcecae12455b91a7ef92133f1e1ab8409cb840ef08f0c6b7251758f9c896dfef"
   end
 
+  env :std
   depends_on "cmake" => :build
   depends_on "abhinavsns/homebrew-openfpm/algoim"
   depends_on "abhinavsns/homebrew-openfpm/blitz"
@@ -24,7 +25,6 @@ class Openfpm < Formula
   depends_on "boost@1.85"
   depends_on "ccache"
   depends_on "eigen"
-  depends_on "gcc@11"
   depends_on "hdf5-mpi"
   depends_on "libomp"
   depends_on "open-mpi"
@@ -33,51 +33,43 @@ class Openfpm < Formula
   depends_on "vc"
 
   def install
-    # ---------- compiler setup ----------
-    if OS.mac?
-      cc  = ENV.cc      # clang from super-env
-      cxx = ENV.cxx
-    else                  # Linux
-      ENV["CC"]  = "mpicc"
-      ENV["CXX"] = "mpic++"
-      ENV["HOMEBREW_CC"]  = "gcc"
-      ENV["HOMEBREW_CXX"] = "g++"
-    end
-    brew_prefix    = HOMEBREW_PREFIX        # → /home/linuxbrew/.linuxbrew
-    openmpi_prefix = Formula["open-mpi"].opt_prefix
-    cmake_prefix_path = "#{brew_prefix};#{openmpi_prefix}"
-    mkdir "build" do
-      args = std_cmake_args + %W[
-        -DCMAKE_PREFIX_PATH=#{cmake_prefix_path}
-        -DCMAKE_C_COMPILER=#{cc}
-        -DCMAKE_CXX_COMPILER=#{cxx}
-        -DMPI_C_COMPILER=#{Formula["open-mpi"].opt_bin/"mpicc"}
-        -DMPI_CXX_COMPILER=#{Formula["open-mpi"].opt_bin/"mpic++"}
-        -DCMAKE_BUILD_TYPE=Release
-        -DSE_CLASS1=OFF -DSE_CLASS2=OFF -DSE_CLASS3=OFF
-        -DTEST_COVERAGE=OFF -DSCAN_COVERTY=OFF -DTEST_PERFORMANCE=OFF
-        -DENABLE_ASAN=OFF -DENABLE_NUMERICS=ON
-        -DENABLE_GARBAGE_INJECTOR=OFF -DENABLE_VCLUSTER_GARBAGE_INJECTOR=OFF
-        -DMPI_VENDOR=openmpi
-        -DMPI_ROOT=#{Formula["open-mpi"].opt_prefix}
-        -DPETSC_ROOT=#{Formula["petsc"].opt_prefix}
-        -DBOOST_ROOT=#{Formula["boost@1.85"].opt_prefix}
-        -DBoost_NO_BOOST_CMAKE=ON
-        -DHDF5_ROOT=#{Formula["hdf5-mpi"].opt_prefix}
-        -DLIBHILBERT_ROOT=#{Formula["abhinavsns/homebrew-openfpm/libhilbert"].opt_prefix}
-        -DBLITZ_ROOT=#{Formula["abhinavsns/homebrew-openfpm/blitz"].opt_prefix}
-        -DALGOIM_ROOT=#{Formula["abhinavsns/homebrew-openfpm/algoim"].opt_prefix}
-        -DPARMETIS_ROOT=#{Formula["abhinavsns/homebrew-openfpm/parmetis"].opt_prefix}
-        -DMETIS_ROOT=#{Formula["metis"].opt_prefix}
-        -DOPENBLAS_ROOT=#{Formula["openblas"].opt_prefix}
-        -DSUITESPARSE_ROOT=#{Formula["suite-sparse"].opt_prefix}
-        -DEIGEN3_ROOT=#{Formula["eigen"].opt_prefix}
-        -DCMAKE_C_COMPILER_LAUNCHER=ccache
-        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-      ]
-
-      system "cmake", "..", *args
-      system "make", "-j#{ENV.make_jobs}", "install"
+    ENV["CCACHE_DIR"] = "#{Dir.home}/.ccache"
+    mkdir_p ENV["CCACHE_DIR"]
+    mkdir_p "build"
+    ENV.prepend_path "PATH", Formula["open-mpi"].opt_bin
+    cd "build" do
+      system "cmake", "..", *std_cmake_args,
+              "-DCMAKE_PREFIX_PATH=$(brew --prefix)",
+              "-DMPI_C_COMPILER=mpicc",
+              "-DMPI_CXX_COMPILER=mpic++",
+              "-DCMAKE_BUILD_TYPE=Release",
+              "-DSE_CLASS1=OFF",
+              "-DSE_CLASS2=OFF",
+              "-DSE_CLASS3=OFF",
+              "-DTEST_COVERAGE=OFF",
+              "-DSCAN_COVERTY=OFF",
+              "-DTEST_PERFORMANCE=OFF",
+              "-DENABLE_ASAN=OFF",
+              "-DENABLE_NUMERICS=ON",
+              "-DENABLE_GARBAGE_INJECTOR=OFF",
+              "-DENABLE_VCLUSTER_GARBAGE_INJECTOR=OFF",
+              "-DMPI_VENDOR=openmpi",
+              "-DMPI_ROOT=#{Formula["open-mpi"].opt_prefix}",
+              "-DPETSC_ROOT=#{Formula["petsc"].opt_prefix}",
+              "-DBOOST_ROOT=#{Formula["boost@1.85"].opt_prefix}",
+              "-DBoost_NO_BOOST_CMAKE=ON",
+              "-DHDF5_ROOT=#{Formula["hdf5-mpi"].opt_prefix}",
+              "-DLIBHILBERT_ROOT=#{Formula["abhinavsns/homebrew-openfpm/libhilbert"].opt_prefix}",
+              "-DBLITZ_ROOT=#{Formula["abhinavsns/homebrew-openfpm/blitz"].opt_prefix}",
+              "-DALGOIM_ROOT=#{Formula["abhinavsns/homebrew-openfpm/algoim"].opt_prefix}",
+              "-DPARMETIS_ROOT=#{Formula["abhinavsns/homebrew-openfpm/parmetis"].opt_prefix}",
+              "-DMETIS_ROOT=#{Formula["metis"].opt_prefix}",
+              "-DOPENBLAS_ROOT=#{Formula["openblas"].opt_prefix}",
+              "-DSUITESPARSE_ROOT=#{Formula["suite-sparse"].opt_prefix}",
+              "-DEIGEN3_ROOT=#{Formula["eigen"].opt_prefix}",
+              "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache",
+              "-DCMAKE_C_COMPILER_LAUNCHER=ccache"
+      system "make", "-j2", "install"
     end
   end
 end
