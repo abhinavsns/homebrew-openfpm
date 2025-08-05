@@ -16,7 +16,7 @@ class Openfpm < Formula
     sha256 cellar: :any_skip_relocation, x86_64_linux: "dcecae12455b91a7ef92133f1e1ab8409cb840ef08f0c6b7251758f9c896dfef"
   end
 
-   depends_on "cmake" => :build
+  depends_on "cmake" => :build
   depends_on "abhinavsns/homebrew-openfpm/algoim"
   depends_on "abhinavsns/homebrew-openfpm/blitz"
   depends_on "abhinavsns/homebrew-openfpm/libhilbert"
