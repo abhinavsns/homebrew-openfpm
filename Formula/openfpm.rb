@@ -33,17 +33,38 @@ class Openfpm < Formula
   depends_on "vc"
 
   def install
-    ENV.prepend_path "PATH", Formula["open-mpi"].opt_bin
-    ENV["CXX"] = "#{Formula["open-mpi"].opt_bin}/mpic++"
+    # ---------- compiler setup ----------
+    if OS.mac?
+      cc  = ENV.cc      # clang from super-env
+      cxx = ENV.cxx
+    else                  # Linux
+      gcc = Formula["gcc@11"]
+      cc  = gcc.opt_bin/"gcc-11"
+      cxx = gcc.opt_bin/"g++-11"
+
+      # super-env will now use gcc-11 for everything it compiles
+      ENV["HOMEBREW_CC"]  = "gcc-11"
+      ENV["HOMEBREW_CXX"] = "g++-11"
+
+      # make the MPI wrappers invoke the same backend
+      ENV["OMPI_CC"]  = cc
+      ENV["OMPI_CXX"] = cxx
+      ENV.prepend_path "PATH", gcc.opt_bin     # mpicc finds gcc-11 first
+      ENV.append "LDFLAGS", "-Wl,-rpath,#{gcc.opt_lib}" # picks right libstdc++
+    end
     mkdir "build" do
       args = std_cmake_args + %W[
+        -DCMAKE_C_COMPILER=#{cc}
+        -DCMAKE_CXX_COMPILER=#{cxx}
+        -DMPI_C_COMPILER=#{Formula["open-mpi"].opt_bin/"mpicc"}
+        -DMPI_CXX_COMPILER=#{Formula["open-mpi"].opt_bin/"mpicxx"}
         -DCMAKE_BUILD_TYPE=Release
         -DSE_CLASS1=OFF -DSE_CLASS2=OFF -DSE_CLASS3=OFF
         -DTEST_COVERAGE=OFF -DSCAN_COVERTY=OFF -DTEST_PERFORMANCE=OFF
         -DENABLE_ASAN=OFF -DENABLE_NUMERICS=ON
         -DENABLE_GARBAGE_INJECTOR=OFF -DENABLE_VCLUSTER_GARBAGE_INJECTOR=OFF
         -DMPI_VENDOR=openmpi
-        -DMPI_ROOT=#{Formula["petsc"].opt_prefix}
+        -DMPI_ROOT=#{Formula["open-mpi"].opt_prefix}
         -DPETSC_ROOT=#{Formula["petsc"].opt_prefix}
         -DBOOST_ROOT=#{Formula["boost@1.85"].opt_prefix}
         -DBoost_NO_BOOST_CMAKE=ON
