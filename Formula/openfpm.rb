@@ -33,12 +33,8 @@ class Openfpm < Formula
   depends_on "vc"
 
   def install
-    ENV["OMPI_CC"]  = "gcc"
-    ENV["OMPI_CXX"] = "g++"
-    ENV["CC"]  = "gcc"
-    ENV["CXX"] = "g++"
     ENV.prepend_path "PATH", Formula["open-mpi"].opt_bin
-    # ── 2. Normal build ──
+    ENV["CXX"] = "#{Formula["open-mpi"].opt_bin}/mpic++"
     mkdir "build" do
       args = std_cmake_args + %W[
         -DCMAKE_C_COMPILER=gcc
