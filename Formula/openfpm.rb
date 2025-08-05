@@ -33,36 +33,25 @@ class Openfpm < Formula
   depends_on "vc"
 
   def install
-    # ── 1. Pin super-env to GCC-11 everywhere in this build ──
-    ENV["HOMEBREW_CC"]  = "gcc-11"
-    ENV["HOMEBREW_CXX"] = "g++-11"
-
-    gcc11 = Formula["gcc@11"].opt_bin
-    cc    = gcc11/"gcc-11"
-    cxx   = gcc11/"g++-11"
-
-    # Tell Open MPI’s wrappers to use the same backend
-    ENV["OMPI_CC"]  = cc
-    ENV["OMPI_CXX"] = cxx
-
-    # CMake will see these via the super-env shim layer
-    ENV["CC"]  = cc
-    ENV["CXX"] = cxx
-
+    ENV["OMPI_CC"]  = "gcc"
+    ENV["OMPI_CXX"] = "g++"
+    ENV["CC"]  = "gcc"
+    ENV["CXX"] = "g++"
+    ENV.prepend_path "PATH", Formula["open-mpi"].opt_bin
     # ── 2. Normal build ──
     mkdir "build" do
       args = std_cmake_args + %W[
-        -DCMAKE_C_COMPILER=#{cc}
-        -DCMAKE_CXX_COMPILER=#{cxx}
-        -DMPI_C_COMPILER=#{Formula["open-mpi"].opt_bin/"mpicc"}
-        -DMPI_CXX_COMPILER=#{Formula["open-mpi"].opt_bin/"mpic++"}
+        -DCMAKE_C_COMPILER=gcc
+        -DCMAKE_CXX_COMPILER=g++
+        -DMPI_C_COMPILER=mpicc
+        -DMPI_CXX_COMPILER=mpic++
         -DCMAKE_BUILD_TYPE=Release
         -DSE_CLASS1=OFF -DSE_CLASS2=OFF -DSE_CLASS3=OFF
         -DTEST_COVERAGE=OFF -DSCAN_COVERTY=OFF -DTEST_PERFORMANCE=OFF
         -DENABLE_ASAN=OFF -DENABLE_NUMERICS=ON
         -DENABLE_GARBAGE_INJECTOR=OFF -DENABLE_VCLUSTER_GARBAGE_INJECTOR=OFF
         -DMPI_VENDOR=openmpi
-        -DMPI_ROOT=#{Formula["open-mpi"].opt_prefix}
+        -DMPI_ROOT=#{Formula["petsc"].opt_prefix}
         -DPETSC_ROOT=#{Formula["petsc"].opt_prefix}
         -DBOOST_ROOT=#{Formula["boost@1.85"].opt_prefix}
         -DBoost_NO_BOOST_CMAKE=ON
