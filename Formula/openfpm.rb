@@ -43,12 +43,16 @@ class Openfpm < Formula
       ENV["HOMEBREW_CC"]  = "gcc"
       ENV["HOMEBREW_CXX"] = "g++"
     end
+    brew_prefix    = HOMEBREW_PREFIX        # → /home/linuxbrew/.linuxbrew
+    openmpi_prefix = Formula["open-mpi"].opt_prefix
+    cmake_prefix_path = "#{brew_prefix};#{openmpi_prefix}"
     mkdir "build" do
       args = std_cmake_args + %W[
+        -DCMAKE_PREFIX_PATH=#{cmake_prefix_path}
         -DCMAKE_C_COMPILER=#{cc}
         -DCMAKE_CXX_COMPILER=#{cxx}
         -DMPI_C_COMPILER=#{Formula["open-mpi"].opt_bin/"mpicc"}
-        -DMPI_CXX_COMPILER=#{Formula["open-mpi"].opt_bin/"mpicxx"}
+        -DMPI_CXX_COMPILER=#{Formula["open-mpi"].opt_bin/"mpic++"}
         -DCMAKE_BUILD_TYPE=Release
         -DSE_CLASS1=OFF -DSE_CLASS2=OFF -DSE_CLASS3=OFF
         -DTEST_COVERAGE=OFF -DSCAN_COVERTY=OFF -DTEST_PERFORMANCE=OFF
