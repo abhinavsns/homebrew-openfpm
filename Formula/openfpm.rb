@@ -38,19 +38,10 @@ class Openfpm < Formula
       cc  = ENV.cc      # clang from super-env
       cxx = ENV.cxx
     else                  # Linux
-      gcc = Formula["gcc@11"]
-      cc  = gcc.opt_bin/"gcc-11"
-      cxx = gcc.opt_bin/"g++-11"
-
-      # super-env will now use gcc-11 for everything it compiles
-      ENV["HOMEBREW_CC"]  = "gcc-11"
-      ENV["HOMEBREW_CXX"] = "g++-11"
-
-      # make the MPI wrappers invoke the same backend
-      ENV["OMPI_CC"]  = cc
-      ENV["OMPI_CXX"] = cxx
-      ENV.prepend_path "PATH", gcc.opt_bin     # mpicc finds gcc-11 first
-      ENV.append "LDFLAGS", "-Wl,-rpath,#{gcc.opt_lib}" # picks right libstdc++
+      ENV["CC"]  = "mpicc"
+      ENV["CXX"] = "mpic++"
+      ENV["HOMEBREW_CC"]  = "gcc"
+      ENV["HOMEBREW_CXX"] = "g++"
     end
     mkdir "build" do
       args = std_cmake_args + %W[
