@@ -8,6 +8,14 @@ class Openfpm < Formula
   license "BSD-3-Clause"
   head "https://github.com/mosaic-group/openfpm.git", branch: "master"
 
+  bottle do
+    root_url "https://github.com/abhinavsns/homebrew-openfpm/releases/download/openfpm-5.0.1"
+    rebuild 2
+    sha256 cellar: :any,                 arm64_sonoma: "bfb2960e931c7252acf21760eec0199a58c372889a148902882384794470461f"
+    sha256 cellar: :any,                 ventura:      "a9b4991554d0368ec4c315f4e45c048145fe3ba27ec53a7fec430c121ff2a3c9"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "84b33926d3cae953fc1b2c8928a82821e24b10bbf7a5ff6a5b4a6be67fe060a2"
+  end
+
   depends_on "cmake" => :build
   depends_on "abhinavsns/homebrew-openfpm/algoim"
   depends_on "abhinavsns/homebrew-openfpm/blitz"
