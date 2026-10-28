@@ -53,7 +53,12 @@ jobs:
           chmod +x rattler-build
 
       - name: Build and test the packages
+        # bash (unlike the default shell) sets pipefail, so a failed build is not hidden by tee
+        shell: bash
         run: ./rattler-build build --recipe-dir conda/recipes --output-dir output -c conda-forge 2>&1 | tee build.log
+
+      - name: Check that every package was built
+        run: ls output/${{ matrix.platform }}/{openfpm,vcdevel,libhilbert}-*.conda output/noarch/algoim-*.conda
 
       - name: Show the errors as annotations
         if: failure()
@@ -131,9 +136,17 @@ jobs:
 
       - name: Check the channel
         run: |
-          for subdir in noarch linux-64 linux-aarch64 osx-64 osx-arm64; do
-            python3 -c "import json, sys; d = json.load(open(sys.argv[1])); print(sys.argv[1], sorted(d['packages.conda']))" "$subdir/repodata.json"
-          done
+          python3 - <<'PY'
+          import json
+          expected = {"noarch": {"algoim"}}
+          for subdir in ["linux-64", "linux-aarch64", "osx-64", "osx-arm64"]:
+              expected[subdir] = {"openfpm", "vcdevel", "libhilbert"}
+          for subdir, names in expected.items():
+              packages = json.load(open(f"{subdir}/repodata.json"))["packages.conda"]
+              found = {p["name"] for p in packages.values()}
+              print(subdir, sorted(packages))
+              assert names <= found, f"{subdir} lacks {sorted(names - found)}"
+          PY
 
       - name: Push the channel
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
