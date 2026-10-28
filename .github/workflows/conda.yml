@@ -19,6 +19,7 @@ on:
 
 env:
   RATTLER_BUILD_VERSION: v0.79.0
+  PIXI_VERSION: v0.83.0
 
 jobs:
   build:
@@ -78,13 +79,13 @@ jobs:
           if-no-files-found: error
 
   publish:
-    name: Publish the channel
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    # Indexes the channel with the new packages on every run; pushes it only from main
+    name: Index and publish the channel
     needs: build
     runs-on: ubuntu-24.04
     # One run at a time pushes to the channel branch
     concurrency:
-      group: conda-channel
+      group: conda-channel-${{ github.ref }}
       cancel-in-progress: false
     permissions:
       contents: write
@@ -119,20 +120,23 @@ jobs:
           # A channel needs a noarch subdirectory, and Pages should serve the files as they are
           mkdir -p noarch
           touch .nojekyll
-          # conda-index keeps a cache next to each subdirectory's packages
-          echo ".cache/" > .gitignore
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
 
       - name: Index the channel
         run: |
-          pip install conda-index==0.13.0
-          python -m conda_index .
+          curl -fsSL https://pixi.sh/install.sh | bash
+          # Index a copy without .git, then bring the repodata files back
+          rsync -a --exclude .git ./ /tmp/channel/
+          ~/.pixi/bin/pixi exec rattler-index fs /tmp/channel
+          rsync -a /tmp/channel/ ./
+
+      - name: Check the channel
+        run: |
+          for subdir in noarch linux-64 linux-aarch64 osx-64 osx-arm64; do
+            python3 -c "import json, sys; d = json.load(open(sys.argv[1])); print(sys.argv[1], sorted(d['packages.conda']))" "$subdir/repodata.json"
+          done
 
       - name: Push the channel
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
