@@ -1,0 +1,44 @@
+context:
+  version: "1.0.0"
+
+package:
+  name: libhilbert
+  version: ${{ version }}
+
+source:
+  git: https://github.com/abhinavsns/libhilbert
+  rev: 64efb35aa5d194ca3fec4c9d79e552838476e543
+
+build:
+  number: 0
+  script:
+    # The project declares CMake 2.6, which CMake 4 only accepts with this setting
+    - cmake -S . -B build ${CMAKE_ARGS:-} -DCMAKE_INSTALL_PREFIX="$PREFIX" -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    - cmake --build build --parallel ${CPU_COUNT}
+    - cmake --install build
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - cmake
+    - make
+    - ninja
+
+tests:
+  - package_contents:
+      include:
+        - hilbertKey.h
+      files:
+        - lib/liblibhilbert.a
+
+about:
+  homepage: https://github.com/abhinavsns/libhilbert
+  # The files carry Apache-2.0 headers (AIP Potsdam) and GPL-2.0-or-later headers
+  # (Chris Hamilton); the repository also ships the LGPL-2.1 text.
+  license: Apache-2.0 AND GPL-2.0-or-later
+  license_file:
+    - LICENSE
+    - COPYING
+    - NOTICE
+  summary: Library producing Hilbert indices for multidimensional data

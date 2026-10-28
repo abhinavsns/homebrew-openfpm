@@ -1,0 +1,132 @@
+name: Conda packages
+
+# Builds the conda packages in conda/recipes (OpenFPM and the dependencies conda-forge lacks)
+# natively for Linux and macOS, and publishes them from the main branch as a conda channel:
+# the packages are added to the conda-channel branch, which GitHub Pages serves at
+# https://abhinavsns.github.io/homebrew-openfpm. Packages are only added, never removed, so
+# environments locked to them keep working.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'conda/**'
+      - '.github/workflows/conda.yml'
+  pull_request:
+    paths:
+      - 'conda/**'
+      - '.github/workflows/conda.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  RATTLER_BUILD_VERSION: v0.79.0
+
+jobs:
+  build:
+    name: Build (${{ matrix.platform }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux-64
+            runner: ubuntu-24.04
+            rattler: x86_64-unknown-linux-musl
+          - platform: linux-aarch64
+            runner: ubuntu-24.04-arm
+            rattler: aarch64-unknown-linux-musl
+          - platform: osx-64
+            runner: macos-15-intel
+            rattler: x86_64-apple-darwin
+          - platform: osx-arm64
+            runner: macos-15
+            rattler: aarch64-apple-darwin
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 300
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install rattler-build
+        run: |
+          curl -fsSL -o rattler-build \
+            "https://github.com/prefix-dev/rattler-build/releases/download/${RATTLER_BUILD_VERSION}/rattler-build-${{ matrix.rattler }}"
+          chmod +x rattler-build
+
+      - name: Build and test the packages
+        run: ./rattler-build build --recipe-dir conda/recipes --output-dir output -c conda-forge
+
+      - name: Upload the packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages-${{ matrix.platform }}
+          path: |
+            output/${{ matrix.platform }}/*.conda
+            output/noarch/*.conda
+          if-no-files-found: error
+
+  publish:
+    name: Publish the channel
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Check out the channel branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Switch to the channel branch
+        run: |
+          if git ls-remote --exit-code --heads origin conda-channel > /dev/null; then
+            git switch conda-channel
+          else
+            git switch --orphan conda-channel
+          fi
+
+      - name: Download the packages
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/packages
+          pattern: packages-*
+          merge-multiple: true
+
+      - name: Add the packages
+        run: |
+          for subdir in /tmp/packages/*/; do
+            name=$(basename "$subdir")
+            mkdir -p "$name"
+            cp -n "$subdir"*.conda "$name/"
+          done
+          # A channel needs a noarch subdirectory, and Pages should serve the files as they are
+          mkdir -p noarch
+          touch .nojekyll
+          # conda-index keeps a cache next to each subdirectory's packages
+          echo ".cache/" > .gitignore
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Index the channel
+        run: |
+          pip install conda-index==0.13.0
+          python -m conda_index .
+
+      - name: Push the channel
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No new packages"
+          else
+            git commit -m "Add packages built from ${GITHUB_SHA::7}"
+            git push origin conda-channel
+          fi

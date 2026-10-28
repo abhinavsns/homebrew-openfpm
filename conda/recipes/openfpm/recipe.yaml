@@ -1,0 +1,81 @@
+# OpenFPM, built against conda-forge's Open MPI, PETSc, HDF5, Boost and Eigen. The build
+# script is build.sh in this directory.
+context:
+  version: "5.0.1"
+
+package:
+  name: openfpm
+  version: ${{ version }}
+
+source:
+  # The OpenFPM modules are git submodules, which rattler-build clones as well
+  git: https://github.com/mosaic-group/openfpm.git
+  tag: v${{ version }}
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - cmake
+    - make
+    - ninja
+  host:
+    - openmpi
+    # OpenFPM 5.0.1 needs Boost 1.85 and does not compile with Eigen 5. HDF5 and PETSc are
+    # the versions its Homebrew build was made with.
+    - libboost-devel 1.85.*
+    - eigen 3.4.*
+    - hdf5 1.14.* mpi_openmpi_*
+    - petsc 3.23.* real_*
+    - parmetis
+    - metis
+    - suitesparse
+    - openblas
+    - blitzpp
+    - vcdevel
+    - libhilbert
+    - algoim
+  # OpenFPM installs headers and static libraries: programs built with it need the same
+  # dependencies
+  run:
+    - openmpi
+    - libboost-devel 1.85.*
+    - eigen 3.4.*
+    - hdf5 1.14.* mpi_openmpi_*
+    - petsc 3.23.* real_*
+    - parmetis
+    - metis
+    - suitesparse
+    - openblas
+    - blitzpp
+    - vcdevel
+    - libhilbert
+    - algoim
+
+tests:
+  - package_contents:
+      files:
+        - openfpm/openfpm_pdata/include/config/config.h
+        - openfpm/openfpm_pdata/include/Vector/vector_dist.hpp
+        - openfpm/openfpm_numerics/include/DCPSE/Dcpse.hpp
+        - openfpm/openfpm_pdata/lib/libofpm_pdata.a
+        - openfpm/openfpm_vcluster/lib/libvcluster.a
+        - openfpm/openfpm_devices/lib/libofpmmemory.a
+  - script:
+      - grep -q "int sign = 1;" "$PREFIX/openfpm/openfpm_numerics/include/DCPSE/Dcpse.hpp"
+
+about:
+  homepage: http://openfpm.mpi-cbg.de
+  repository: https://github.com/mosaic-group/openfpm
+  license: BSD-3-Clause
+  license_file: LICENSE.md
+  summary: Open scalable framework for particle and particle-mesh simulations
+  description: |
+    OpenFPM 5.0.1, installed under $PREFIX/openfpm with its usual layout
+    (openfpm_pdata/include, openfpm_pdata/lib, ...). Two upstream problems are fixed:
+    the generated config.h is installed, and the DCPSE operators keep their sign in an
+    int instead of a plain char (unsigned on Linux/ARM64, which broke even-order
+    derivatives there).

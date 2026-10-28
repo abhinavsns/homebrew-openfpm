@@ -1,0 +1,29 @@
+# The (header-only) algoim version OpenFPM uses, the same archive as the Homebrew formula
+context:
+  version: "1.0.0"
+
+package:
+  name: algoim
+  version: ${{ version }}
+
+source:
+  url: https://ppmcore.mpi-cbg.de/upload/algoim.tar.gz
+  sha256: 408e6dda7cae51c593c7cb264448de38d1b9fa1e2fc09e5dbac342970659a111
+
+build:
+  number: 0
+  noarch: generic
+  script:
+    - mkdir -p "$PREFIX/include"
+    - cp src/*.hpp "$PREFIX/include/"
+
+tests:
+  - package_contents:
+      include:
+        - algoim_quad.hpp
+
+about:
+  homepage: https://github.com/algoim/algoim
+  license: BSD-3-Clause-LBNL
+  license_file: LICENSE
+  summary: Algorithms for implicitly defined geometry, level set methods and Voronoi implicit interface methods

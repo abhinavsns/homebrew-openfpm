@@ -1,0 +1,43 @@
+# Vc, the SIMD vector library OpenFPM requires. conda-forge's package "vc" is something else
+# (the MSVC runtime), hence the name.
+context:
+  version: "1.4.5"
+
+package:
+  name: vcdevel
+  version: ${{ version }}
+
+source:
+  url: https://github.com/VcDevel/Vc/archive/refs/tags/${{ version }}.tar.gz
+  sha256: eb734ef4827933fcd67d4c74aef54211b841c350a867c681c73003eb6d511a48
+
+build:
+  number: 0
+  script:
+    # TARGET_ARCHITECTURE=generic: by default Vc tunes libVc.a for the build machine's CPU,
+    # which would crash on older CPUs
+    - cmake -S . -B build ${CMAKE_ARGS:-} -DCMAKE_INSTALL_PREFIX="$PREFIX" -DCMAKE_BUILD_TYPE=Release -DTARGET_ARCHITECTURE=generic -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+    - cmake --build build --parallel ${CPU_COUNT}
+    - cmake --install build
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - cmake
+    - make
+    - ninja
+
+tests:
+  - package_contents:
+      include:
+        - Vc/Vc
+      files:
+        - lib/libVc.a
+        - lib/cmake/Vc/VcConfig.cmake
+
+about:
+  homepage: https://github.com/VcDevel/Vc
+  license: BSD-3-Clause
+  license_file: LICENSE
+  summary: SIMD vector classes for C++ (Vc)
