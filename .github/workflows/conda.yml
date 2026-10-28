@@ -56,7 +56,21 @@ jobs:
           chmod +x rattler-build
 
       - name: Build and test the packages
-        run: ./rattler-build build --recipe-dir conda/recipes --output-dir output -c conda-forge
+        run: ./rattler-build build --recipe-dir conda/recipes --output-dir output -c conda-forge 2>&1 | tee build.log
+
+      - name: Show the errors as annotations
+        if: failure()
+        # The job logs can only be downloaded with admin rights; annotations are public
+        run: |
+          python3 - <<'EOF'
+          import re
+          lines = [re.sub(r"\x1b\[[0-9;]*m", "", l) for l in open("build.log", errors="replace").read().splitlines()]
+          def annotate(title, chunk):
+              message = "\n".join(chunk).replace("%", "%25").replace("\r", "").replace("\n", "%0A")
+              print(f"::error title={title}::{message}")
+          annotate("Error lines of the build log", [l for l in lines if re.search(r"error|fail", l, re.I)][-40:])
+          annotate("End of the build log", lines[-60:])
+          EOF
 
       - name: Upload the packages
         uses: actions/upload-artifact@v4
