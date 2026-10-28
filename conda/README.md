@@ -18,11 +18,12 @@ generated `config.h`, and its DCPSE operators keep their sign in an `int` instea
 ## Building
 
 ```bash
-rattler-build build --recipe-dir conda/recipes -c conda-forge
+rattler-build build --recipe-dir conda/recipes -m conda/variants.yaml -c conda-forge
 ```
 
 builds all packages for the current platform into `output/`, which can be used as a local
-channel.
+channel. `variants.yaml` selects the C standard library the packages are built against, as on
+conda-forge (glibc 2.28 on Linux), so that they can be linked in any conda-forge environment.
 
 ## Publishing
 

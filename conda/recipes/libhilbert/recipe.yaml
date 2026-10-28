@@ -10,7 +10,7 @@ source:
   rev: 64efb35aa5d194ca3fec4c9d79e552838476e543
 
 build:
-  number: 0
+  number: 1
   script:
     # The project declares CMake 2.6, which CMake 4 only accepts with this setting
     - cmake -S . -B build ${CMAKE_ARGS:-} -DCMAKE_INSTALL_PREFIX="$PREFIX" -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_POSITION_INDEPENDENT_CODE=ON
@@ -20,6 +20,7 @@ build:
 requirements:
   build:
     - ${{ compiler('c') }}
+    - ${{ stdlib('c') }}
     - ${{ compiler('cxx') }}
     - cmake
     - make

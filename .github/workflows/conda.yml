@@ -55,7 +55,7 @@ jobs:
       - name: Build and test the packages
         # bash (unlike the default shell) sets pipefail, so a failed build is not hidden by tee
         shell: bash
-        run: ./rattler-build build --recipe-dir conda/recipes --output-dir output -c conda-forge 2>&1 | tee build.log
+        run: ./rattler-build build --recipe-dir conda/recipes -m conda/variants.yaml --output-dir output -c conda-forge 2>&1 | tee build.log
 
       - name: Check that every package was built
         run: ls output/${{ matrix.platform }}/{openfpm,vcdevel,libhilbert}-*.conda output/noarch/algoim-*.conda

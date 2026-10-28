@@ -12,7 +12,7 @@ source:
   sha256: eb734ef4827933fcd67d4c74aef54211b841c350a867c681c73003eb6d511a48
 
 build:
-  number: 0
+  number: 1
   script:
     # TARGET_ARCHITECTURE=generic: by default Vc tunes libVc.a for the build machine's CPU,
     # which would crash on older CPUs
@@ -23,6 +23,7 @@ build:
 requirements:
   build:
     - ${{ compiler('c') }}
+    - ${{ stdlib('c') }}
     - ${{ compiler('cxx') }}
     - cmake
     - make

@@ -1,0 +1,16 @@
+# The C standard library the compiled packages are built against. As on conda-forge: glibc 2.28
+# on Linux (also the default of pixi) and macOS 10.13 (Intel) or 11.0 (Apple Silicon). Without
+# it, the Linux packages get the newest sysroot and cannot be linked in environments with glibc
+# 2.28 (undefined reference to `__libc_single_threaded`).
+c_stdlib:
+  - if: linux
+    then: sysroot
+  - if: osx
+    then: macosx_deployment_target
+c_stdlib_version:
+  - if: linux
+    then: "2.28"
+  - if: osx and x86_64
+    then: "10.13"
+  - if: osx and arm64
+    then: "11.0"
