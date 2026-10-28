@@ -1,14 +1,13 @@
 name: Conda packages
 
 # Builds the conda packages in conda/recipes (OpenFPM and the dependencies conda-forge lacks)
-# natively for Linux and macOS, and publishes them from the main branch as a conda channel:
+# natively for Linux and macOS whenever they change (on any branch), and publishes them from
+# the main branch as a conda channel:
 # the packages are added to the conda-channel branch, which GitHub Pages serves at
 # https://abhinavsns.github.io/homebrew-openfpm. Packages are only added, never removed, so
 # environments locked to them keep working.
 on:
   push:
-    branches:
-      - main
     paths:
       - 'conda/**'
       - '.github/workflows/conda.yml'
