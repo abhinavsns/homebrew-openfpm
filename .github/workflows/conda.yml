@@ -17,10 +17,6 @@ on:
       - '.github/workflows/conda.yml'
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
 env:
   RATTLER_BUILD_VERSION: v0.79.0
 
@@ -86,6 +82,10 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-24.04
+    # One run at a time pushes to the channel branch
+    concurrency:
+      group: conda-channel
+      cancel-in-progress: false
     permissions:
       contents: write
     steps:
