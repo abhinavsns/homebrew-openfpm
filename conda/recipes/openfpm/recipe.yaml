@@ -13,7 +13,7 @@ source:
   tag: v${{ version }}
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
@@ -22,6 +22,8 @@ requirements:
     - cmake
     - make
     - ninja
+    # openfpm_numerics downloads its minter dependency with git while building
+    - git
   host:
     - openmpi
     # OpenFPM 5.0.1 needs Boost 1.85 and does not compile with Eigen 5. HDF5 and PETSc are

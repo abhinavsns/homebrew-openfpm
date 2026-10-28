@@ -12,6 +12,8 @@ done
 # Compile through Open MPI's wrappers, which call the conda compilers
 export OMPI_CC="$CC" OMPI_CXX="$CXX"
 export CC="$PREFIX/bin/mpicc" CXX="$PREFIX/bin/mpicxx"
+# OpenFPM assumes that char is signed, as on x86-64 and macOS; on Linux/ARM64 it is unsigned
+export CXXFLAGS="${CXXFLAGS:-} -fsigned-char"
 
 cmake -S . -B build ${CMAKE_ARGS:-} \
   -DCMAKE_INSTALL_PREFIX="$PREFIX/openfpm" \
@@ -34,8 +36,11 @@ cmake -S . -B build ${CMAKE_ARGS:-} \
   -DEIGEN3_ROOT="$PREFIX" \
   -DVc_ROOT="$PREFIX"
 
-# Each compiler process needs several GB for OpenFPM's templates
-cmake --build build --parallel 2
+# Build only what is installed: the libraries and the minter headers, which numerics fetches
+# with git. The unit tests are most of the work and are not part of the package.
+# Each compiler process needs several GB for OpenFPM's templates.
+cmake --build build --parallel 2 --target \
+  ofpmmemory ofpmmemory_dl vcluster vcluster_dl ofpm_pdata ofpm_pdata_dl minter
 cmake --install build
 
 # OpenFPM's headers include the generated config.h, but its install step does not copy it
