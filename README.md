@@ -1,17 +1,28 @@
 # homebrew-openfpm
 
-This repository contains the homebrew formula for OpenFPM and it dependencies.
+Homebrew formulae for [OpenFPM](https://openfpm.mpi-cbg.de) 5.0.1 and the dependencies that
+Homebrew itself does not provide (ParMETIS, libhilbert, Blitz++, algoim), and conda packages of
+OpenFPM.
 
-## Installation
+## Installation with Homebrew
+
 ```bash
 brew tap abhinavsns/homebrew-openfpm
-brew install openfpm
+brew trust abhinavsns/openfpm   # Homebrew 7 loads formulae of third-party taps only after this
+brew install abhinavsns/homebrew-openfpm/openfpm
 ```
-After successful compilation, we have to create the example.mk file in the `$HOME` folder as `.ofpexample.mk`. This can be done by running `create_brew.mk.sh` from the repo. In a future release this will be eliminated via CMake:
 
-and can be configured using the CMake command that brew outputs during the installation.
+Bottles (precompiled packages) exist for Apple Silicon Macs with macOS 15 or newer and for Linux
+(x86-64 and ARM64). On Intel Macs, Homebrew compiles OpenFPM and most of its dependencies from
+source, which takes hours.
 
-Whenever compiling an OpenFPM example, please edit the makefile to modify the line `include example.mk` with `include ~/example.mk`.
+OpenFPM is installed in `$(brew --prefix openfpm)` with its usual layout (`openfpm_pdata/include`,
+`openfpm_pdata/lib`, ...), including the generated `openfpm_pdata/include/config/config.h`. It is
+built with Homebrew's `boost`, `eigen@3` (OpenFPM 5.0.1 does not compile with Eigen 5), `hdf5-mpi`,
+`petsc` and `open-mpi`, and programs using it need their include and library paths as well:
+`Formula/createbrewenv.sh` writes them to `~/example.mk` (and `~/.ofpexample.mk`), which the
+makefiles of OpenFPM's examples include. The `test do` block of `Formula/openfpm.rb` shows a
+complete compile command.
 
 ## Conda packages
 
@@ -26,23 +37,22 @@ pixi add openfpm
 ```
 OpenFPM is installed in `$CONDA_PREFIX/openfpm` (`openfpm_pdata/include`,
 `openfpm_pdata/lib`, ...). See [conda/README.md](conda/README.md) for how the packages are built.
-To compile again from a fresh clone but using brew dependencies, the following cmake command can be used inside a build folder.
-```bash
-cmake .. -DCMAKE_PREFIX_PATH=$(brew --prefix) -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=($HOME)/.local/ofp_install -DCMAKE_BUILD_TYPE=Debug -DSE_CLASS1=OFF -DSE_CLASS2=OFF -DSE_CLASS3=OFF -DTEST_COVERAGE=OFF -DSCAN_COVERTY=OFF -DTEST_PERFORMANCE=OFF -DENABLE_ASAN=OFF -DENABLE_NUMERICS=ON -DENABLE_GARBAGE_INJECTOR=OFF -DENABLE_VCLUSTER_GARBAGE_INJECTOR=OFF -DCUDA_ON_BACKEND=NONE -DMPI_VENDOR=openmpi -DMPI_ROOT=$(brew --prefix openmpi) -DPETSC_ROOT=$(brew --prefix petsc) -DBOOST_ROOT=$(brew --prefix boost@1.85) -DBoost_NO_BOOST_CMAKE=ON -DLIBHILBERT_ROOT=$(brew --prefix libhilbert) -DBLITZ_ROOT=$(brew --prefix blitz) -DALGOIM_ROOT=$(brew --prefix algoim) -DPARMETIS_ROOT=$(brew --prefix parmetis) -DMETIS_ROOT=$(brew --prefix metis) -DVc_ROOT=$(brew --prefix vc) -DOPENBLAS_ROOT=$(brew --prefix openblas) -DEIGEN3_ROOT=$(brew --prefix eigen) -DSUITESPARSE_ROOT=$(brew --prefix suitesparse) -DBLAS_ROOT=$(brew --prefix openblas) -DHDF5_ROOT=$(brew --prefix hdf5-mpi)
-```
 
-Only tested on MacOS Sonoma with Xcode 15 toolchain. Compiles the latest develop branch of OpenFPM.
+## Maintenance
 
-## Useful Information
+The workflow "brew test-bot" checks the formulae on every push. For pull requests, and for pushes
+to other branches than `main`, it also builds and tests the changed formulae as bottles on macOS 15
+(Apple Silicon) and Linux (x86-64 and ARM64). Once a pull request passes, add the label `pr-pull`
+to it (or run the "brew pr-pull" workflow with its number): this uploads the bottles to GitHub
+Releases and pushes the commits, with the new bottle blocks, to `main`.
 
-After successful compilation, it creates the example.mk file in the `$HOME` folder as `example.mk`. Whenever compiling an OpenFPM example, please edit the makefile to modify the line `include example.mk` with `include ~/.ofpexample.mk`
-During the install, brew outputs the cmake command that could be used to reconfigure the retreived source.
+The bottles are built against the Homebrew versions of OpenFPM's dependencies. When Homebrew moves
+one of them to a new major version (e.g. HDF5 or PETSc), increase `revision` in
+`Formula/openfpm.rb` in a pull request to rebuild them.
 
-Sourcing environment variables is not required for an homebrew installation.
+## Troubleshooting
 
-## Troubleshoting
-
-If you encouter issues with cmake and hdf5, please unlink hdf5 and try the installation again.
+If CMake picks up the serial HDF5 instead of `hdf5-mpi`, unlink it and try again:
 ```bash
 brew unlink hdf5
 ```
