@@ -16,4 +16,16 @@ class Algoim < Formula
   def install
     include.install Dir["src/*"]
   end
+
+  test do
+    (testpath/"test.cpp").write <<~CPP
+      #include <algoim_real.hpp>
+      int main() {
+        Algoim::Real x = 0.5;
+        return x == 0.5 ? 0 : 1;
+      }
+    CPP
+    system ENV.cxx, "test.cpp", "-I#{include}", "-o", "test"
+    system "./test"
+  end
 end

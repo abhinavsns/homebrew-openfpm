@@ -13,13 +13,26 @@ class Blitz < Formula
   end
 
   depends_on "cmake" => :build
-  depends_on "python"
+  depends_on "python" => :build
 
   def install
-    build_dir = "build"
-    mkdir build_dir do
-      system "cmake", "..", *std_cmake_args, "-DBUILD_TESTING=OFF"
-      system "make", "install"
-    end
+    # The project declares an old CMake policy version, which CMake 4 only accepts with a minimum
+    system "cmake", "-S", ".", "-B", "build", "-DBUILD_TESTING=OFF", "-DCMAKE_POLICY_VERSION_MINIMUM=3.5",
+                    *std_cmake_args
+    system "cmake", "--build", "build"
+    system "cmake", "--install", "build"
+  end
+
+  test do
+    (testpath/"test.cpp").write <<~CPP
+      #include <blitz/array.h>
+      int main() {
+        blitz::Array<double, 2> a(3, 3);
+        a = 2.0;
+        return blitz::sum(a) == 18.0 ? 0 : 1;
+      }
+    CPP
+    system ENV.cxx, "-std=c++11", "test.cpp", "-I#{include}", "-L#{lib}", "-lblitz", "-o", "test"
+    system "./test"
   end
 end

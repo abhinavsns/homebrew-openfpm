@@ -22,7 +22,7 @@ LIBS_PATH=""
 LIBS=""
 
 # Dependencies array. Ensure these are the correct formula names in Homebrew.
-depends=("petsc" "parmetis" "metis" "hdf5-mpi" "libhilbert" "boost@1.85" "vc" "blitz" "algoim" "suitesparse" "libomp")
+depends=("petsc" "parmetis" "metis" "hdf5-mpi" "libhilbert" "boost" "vc" "blitz" "algoim" "suitesparse" "libomp")
 
 # Add paths for each dependency
 for dep in "${depends[@]}"
@@ -30,7 +30,7 @@ do
   add_dependency_paths "${dep}"
 done
 
-INCLUDE_PATH="${INCLUDE_PATH} -I$(brew --prefix eigen)/include/eigen3/"
+INCLUDE_PATH="${INCLUDE_PATH} -I$(brew --prefix eigen@3)/include/eigen3/"
 INCLUDE_PATH="${INCLUDE_PATH} -I$(brew --prefix suitesparse)/include/suitesparse/"
 
 # Additional dependencies or paths can be added directly. Adjust as necessary.
