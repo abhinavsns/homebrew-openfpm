@@ -10,10 +10,10 @@ class Libhilbert < Formula
 
   bottle do
     root_url "https://github.com/abhinavsns/homebrew-openfpm/releases/download/libhilbert-1.0.0_1"
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_sonoma: "76d8561bccf0ea35eec6dfaf8c16bf7479a6aee0a2e4ffbebf366c6b61e1c80c"
-    sha256 cellar: :any_skip_relocation, ventura:      "b3107626e25e7e5bb82cf31c993588c7b9e200ad227748acfdcf1d875b703882"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "be66f076c292fd48fa98fa496bec75e4561296a153c4248de7d34cbb217994fc"
+    rebuild 2
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "d5b717cf3e0b3b1d63f7de077201797cd9e8d4559f08d84812ff15ddccd6f3af"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "b9cd53156d282f4ee63bd12d8fc6e464aa2f2960b2c26f0b09946037d77fedf8"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "5a538f877f68ef9b668cf46ef64289721c96d8dba90b39104b5a05903cab7ae7"
   end
 
   depends_on "cmake" => :build
