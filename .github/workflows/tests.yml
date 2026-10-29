@@ -73,15 +73,14 @@ jobs:
           if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
             brew test-bot --only-formulae
           else
-            # On a push, test-bot compares the pushed commit with itself: name the formulae that
-            # differ from main instead
+            # On a push, test-bot compares the pushed commit with itself: list the formulae that
+            # differ from main instead (in one option, so that they are tested in one run)
             tap=$(brew --repository "$GITHUB_REPOSITORY")
             git -C "$tap" fetch origin main
             formulae=$(git -C "$tap" diff --name-only origin/main HEAD -- Formula |
-                       sed -n 's|^Formula/\(.*\)\.rb$|abhinavsns/openfpm/\1|p')
+                       sed -n 's|^Formula/\(.*\)\.rb$|abhinavsns/openfpm/\1|p' | paste -sd, -)
             if [[ -n "$formulae" ]]; then
-              # shellcheck disable=SC2086
-              brew test-bot --only-formulae $formulae
+              brew test-bot --only-formulae --testing-formulae="$formulae"
             fi
           fi
 
