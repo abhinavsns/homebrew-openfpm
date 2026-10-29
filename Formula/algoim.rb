@@ -7,10 +7,10 @@ class Algoim < Formula
 
   bottle do
     root_url "https://github.com/abhinavsns/homebrew-openfpm/releases/download/algoim-1.0.0"
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, arm64_sonoma: "315056703cc0d16aa46bf1057a3169160d5ca792a37c315491b1d8410266925f"
-    sha256 cellar: :any_skip_relocation, ventura:      "3bdf02812c54785587f5a58e6037bf0e277409f6e90e7786cd507939a5ca3405"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "cd4a6eaa1db69a9ffc4c4b923f9ca909d60b2721068216c01cb0bcbd53bfe3ed"
+    rebuild 2
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "14017342f6d6e00ddf74fd6ea13114b97f706d97d985cc37bb4199100b94a2ef"
+    sha256 cellar: :any_skip_relocation, arm64_linux:   "a7698dc569bee90cc7b880b91e44fecc54d4cb37bebb93e92d6d067e0865bf9b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d0e4858c90a96326942f6b15359e2f3b0192379491cad92224ff16352ae4e242"
   end
 
   def install
