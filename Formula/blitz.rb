@@ -6,10 +6,10 @@ class Blitz < Formula
 
   bottle do
     root_url "https://github.com/abhinavsns/homebrew-openfpm/releases/download/blitz-1.0.2"
-    rebuild 1
-    sha256 cellar: :any,                 arm64_sonoma: "55b3c741637bf136a89d69953827840859f0b94b434b197848f3d9a0297b672f"
-    sha256 cellar: :any,                 ventura:      "5390f60dad56d3f62a8e782aa53503099530a28063e51b672b005529a189f82e"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "627434946ae60161a693a17e66066fb7dd36aec20318484157134a791bf120bf"
+    rebuild 2
+    sha256 cellar: :any, arm64_sequoia: "3795f3580027e8f669aaf327e94946c6484ef24fc41aa640411524f3e0283dbe"
+    sha256 cellar: :any, arm64_linux:   "6d5d769752b58e146791c6b8acb1d165e20f22bcacaa4ec70eba67fd03be3255"
+    sha256 cellar: :any, x86_64_linux:  "48032cb9b4b60a48b0fc449536d5958e4b5055568d395b4310aa31e7426a7da0"
   end
 
   depends_on "cmake" => :build
