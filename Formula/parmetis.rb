@@ -5,6 +5,13 @@ class Parmetis < Formula
   sha256 "e7426c78e0ac12b3916e220766b19216ea93b93c049aedfcda4a9c742b4feb9b"
   revision 2
 
+  bottle do
+    root_url "https://github.com/abhinavsns/homebrew-openfpm/releases/download/parmetis-4.0.3_2"
+    sha256 cellar: :any, arm64_sequoia: "8bc38787e0eac4d6d15d5c745bf4e047fec145497af4f175b8a6b952bdafd1c5"
+    sha256 cellar: :any, arm64_linux:   "d88e3b7757a39b9d03ff73dc9c6e7fd79e4ef777a65b059857f8251401717927"
+    sha256 cellar: :any, x86_64_linux:  "d4498d09f9142677ae646554e95c88105be1848ee44ecd0c9aaebe5ceaab526c"
+  end
+
   depends_on "cmake" => :build
   depends_on "metis"
   depends_on "open-mpi"
