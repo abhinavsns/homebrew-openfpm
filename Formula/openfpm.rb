@@ -50,8 +50,11 @@ class Openfpm < Formula
 
     ENV["CC"] = formula_opt_bin("open-mpi")/"mpicc"
     ENV["CXX"] = formula_opt_bin("open-mpi")/"mpicxx"
+    # OpenMP only serves OpenFPM's CUDA-on-CPU backend, which is not built. If CMake found it (on
+    # macOS: only when libomp happens to be installed), the headers would require omp.h.
     args = %W[
       -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+      -DCMAKE_DISABLE_FIND_PACKAGE_OpenMP=ON
       -DCMAKE_CXX_FLAGS=-fsigned-char
       -DSE_CLASS1=OFF
       -DSE_CLASS2=OFF
