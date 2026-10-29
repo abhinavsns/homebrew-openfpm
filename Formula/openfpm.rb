@@ -9,6 +9,13 @@ class Openfpm < Formula
   revision 1
   head "https://github.com/mosaic-group/openfpm.git", branch: "master"
 
+  bottle do
+    root_url "https://github.com/abhinavsns/homebrew-openfpm/releases/download/openfpm-5.0.1_1"
+    sha256 cellar: :any, arm64_sequoia: "80c38027b0f99e82fe6283008f8dfa3062709fb75ab78b2ee85252b2c8ef4557"
+    sha256 cellar: :any, arm64_linux:   "92448d985e7f3068062ca1026a083e732fc10afa0903a3d85d6b57a578394cca"
+    sha256 cellar: :any, x86_64_linux:  "f259a69323e73efef948062e4538bd8ef3754c1b3f37a861da1cd35727bce858"
+  end
+
   depends_on "cmake" => :build
   depends_on "abhinavsns/homebrew-openfpm/algoim"
   depends_on "abhinavsns/homebrew-openfpm/blitz"
